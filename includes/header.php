@@ -9,6 +9,15 @@
 </head>
 
 <body>
-    <nav>
-        <a href="/pages/dashboard.php">Dashboard</a>
+    <nav class="flex justify-between p-4">
+        <div>
+            <a href="/pages/dashboard.php">Dashboard</a>
+        </div>
+        <div>
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <a href="../logout.php">Logout</a>
+            <?php else: ?>
+                <a href="/pages/register.php">Register</a>
+            <?php endif; ?>
+        </div>
     </nav>
