@@ -1,9 +1,15 @@
 <?php
 
-// Create a database connection
-$conn = mysqli_connect('localhost', 'root', '', 'game_tracker');
+$host = 'localhost';
+$db = 'game_tracker';
+$user = 'root';
+$pass = '';
+
+// Create a database connection and set charset
+$conn = new mysqli($host, $user, $pass, $db);
+$conn->set_charset('utf8mb4');
 
 // Thow an error if could not connect
-if (!$conn) {
-    die('Connection failed: ' . mysqli_connect_error());
+if ($conn->connect_error) {
+    die('Connection failed: ' . $conn->connect_error);
 }
