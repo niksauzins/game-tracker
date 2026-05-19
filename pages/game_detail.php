@@ -32,11 +32,16 @@ $pageTitle = $game['title'];
                 <?= htmlspecialchars($game['genre']) ?>
             </p>
 
-            <!-- Show edit button only for admins -->
             <?php if (isAdmin()): ?>
-                <button id="showEditModalBtn" class="absolute top-0 right-0 m-4 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded z-20">
-                    Edit
-                </button>
+                <!-- Show edit button only for admins -->
+                <div class="flex gap-2 absolute top-0 right-0 m-4">
+                    <button id="showEditModalBtn" class="text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded z-20">
+                        Edit
+                    </button>
+                    <button id="showDeleteModalBtn" class="text-sm font-semibold text-white bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded z-20">
+                        Delete
+                    </button>
+                </div>
             <?php endif; ?>
         </div>
 
@@ -102,21 +107,53 @@ $pageTitle = $game['title'];
         </div>
     </div>
 
+    <!-- Modal to confirm game deletion, only for admins -->
+    <div id="deleteModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center transition-opacity duration-300 z-50">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 mx-4 transform transition-all duration-300">
+            <h2 class="font-bold text-2xl text-gray-800 mb-4 w-full border-b pb-3">Delete Confirmation</h2>
+
+            <p class="text-gray-700 mb-4">Are you sure you want to delete <span class="font-bold"><?= htmlspecialchars($game['title']) ?></span>?</p>
+
+            <form action="../actions/delete_game.php" method="POST">
+                <input type="hidden" name="game_id" id="game_id" value="<?= htmlspecialchars($game['id']) ?>">
+
+                <div class="flex justify-end gap-2">
+                    <button type="button" id="cancelDeleteModalBtn" class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg">Cancel</button>
+                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg shadow">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // Modal variables
+        // DOM variables
         const editModal = document.getElementById('editModal');
         const showEditModalBtn = document.getElementById('showEditModalBtn');
         const cancelEditModalBtn = document.getElementById('cancelEditModalBtn');
 
-        // Helper to toggle visibility
+        const deleteModal = document.getElementById('deleteModal');
+        const showDeleteModalBtn = document.getElementById('showDeleteModalBtn');
+        const cancelDeleteModalBtn = document.getElementById('cancelDeleteModalBtn');
+
+        // Modal visibility toggles
         const toggleEditModal = () => editModal.classList.toggle('hidden');
+        const toggleDeleteModal = () => deleteModal.classList.toggle('hidden');
 
-        // Event Listeners to toggle
-        showEditModalBtn.addEventListener('click', toggleEditModal);
-        cancelEditModalBtn.addEventListener('click', toggleEditModal);
+        // Event listeners for buttons
+        if (showEditModalBtn) showEditModalBtn.addEventListener('click', toggleEditModal);
+        if (cancelEditModalBtn) cancelEditModalBtn.addEventListener('click', toggleEditModal);
 
+        if (showDeleteModalBtn) showDeleteModalBtn.addEventListener('click', toggleDeleteModal);
+        if (cancelDeleteModalBtn) cancelDeleteModalBtn.addEventListener('click', toggleDeleteModal);
+
+        // Event listener for clicking outside the modal
         window.addEventListener('click', (e) => {
-            if (e.target === editModal) toggleEditModal();
+            if (e.target === editModal) {
+                toggleEditModal();
+            }
+            if (e.target === deleteModal) {
+                toggleDeleteModal();
+            }
         });
     </script>
 <?php endif; ?>
