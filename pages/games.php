@@ -31,11 +31,14 @@ $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
             <!-- Loop through all games and display a card -->
             <?php foreach ($games as $game): ?>
-                <div class="border rounded-lg max-w-[300px] w-full shadow-sm hover:shadow-md transition">
+                <div id="game-<?= htmlspecialchars($game['id']) ?>" class="relative group border rounded-lg max-w-[300px] w-full shadow-sm hover:shadow-md transition">
+                    <a href="../pages/game_detail.php?id=<?= htmlspecialchars($game['id']) ?>" class="absolute inset-0 z-10"></a>
+
                     <div class="relative mb-2 border-b border-gray-200 overflow-hidden rounded-t-lg h-[180px]">
-                        <img src="<?= htmlspecialchars($game['image_url']) ?>" alt="<?= htmlspecialchars($game['title']) ?> cover image" class="w-full h-full object-cover">
-                        <p class="absolute top-0 left-0 m-2 text-xs text-white bg-black/70 px-2 py-1 rounded"><?= htmlspecialchars($game['genre']) ?></p>
+                        <img src="<?= htmlspecialchars($game['image_url']) ?>" alt="<?= htmlspecialchars($game['title']) ?> cover image" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                        <p class="absolute top-0 left-0 m-2 text-xs text-white bg-black/70 px-2 py-1 rounded z-20"><?= htmlspecialchars($game['genre']) ?></p>
                     </div>
+
                     <div class="px-4 pb-4">
                         <h2 class="flex justify-between items-center font-semibold text-lg mb-1">
                             <?= htmlspecialchars($game['title']) ?>
@@ -43,6 +46,7 @@ $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                         </h2>
                         <p class="text-sm text-gray-600 line-clamp-3"><?= htmlspecialchars($game['description']) ?></p>
                     </div>
+
                 </div>
             <?php endforeach; ?>
         </div>
