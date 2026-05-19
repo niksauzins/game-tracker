@@ -15,7 +15,12 @@ require_once __DIR__ . '/../config/db.php';
 <body>
     <nav class="flex justify-between p-4">
         <div>
-            <a href="/pages/dashboard.php">Dashboard</a>
+            <?php if (isLoggedIn()): ?>
+                <a href="/pages/dashboard.php">Dashboard</a>
+                <a href="/pages/games.php">Games</a>
+            <?php else: ?>
+                <a href="/">Home</a>
+            <?php endif; ?>
         </div>
         <div>
             <?php if (isLoggedIn()): ?>
