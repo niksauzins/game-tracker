@@ -1,7 +1,8 @@
 <?php
 session_start();
+require_once '../config/db.php';
 // If user already has a session, redirect to dashboard
-if (isset($_SESSION['user_id'])) {
+if (isLoggedIn()) {
     header('Location: dashboard.php');
     exit;
 }

@@ -39,6 +39,7 @@ $stmt->execute();
 // Set session variables
 $_SESSION['user_id'] = $conn->insert_id;
 $_SESSION['username'] = $username;
+$_SESSION['role'] = 'user';
 
 // Redirect to dashboard
 header('Location: ../pages/dashboard.php');

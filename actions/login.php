@@ -32,6 +32,7 @@ if (!$user || !password_verify($password, $user['password'])) {
 // Set session variables
 $_SESSION['user_id'] = $user['id'];
 $_SESSION['username'] = $user['username'];
+$_SESSION['role'] = $user['role'];
 
 header('Location: ../pages/dashboard.php');
 exit;

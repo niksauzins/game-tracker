@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/../config/db.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,7 +18,7 @@
             <a href="/pages/dashboard.php">Dashboard</a>
         </div>
         <div>
-            <?php if (isset($_SESSION['user_id'])): ?>
+            <?php if (isLoggedIn()): ?>
                 <a href="../actions/logout.php">Logout</a>
             <?php else: ?>
                 <a href="/pages/login.php">Login</a>
