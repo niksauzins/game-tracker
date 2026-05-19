@@ -54,7 +54,7 @@ $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 </main>
 
 <!-- Modal with a form to add a new game -->
-<div id="gameModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center transition-opacity duration-300">
+<div id="gameModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center transition-opacity duration-300 z-50">
     <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 mx-4 transform transition-all duration-300">
         <h2 class="font-bold text-2xl text-gray-800 mb-4 w-full border-b pb-3">Add new game</h2>
 
@@ -87,7 +87,7 @@ $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             </div>
 
             <div class="flex justify-end gap-2">
-                <button type="button" id="cancleModalBtn" class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg">Cancle</button>
+                <button type="button" id="cancelModalBtn" class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg">Cancel</button>
                 <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow">Save Game</button>
             </div>
         </form>
@@ -98,14 +98,14 @@ $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     // Set variables
     const modal = document.getElementById('gameModal');
     const openModalBtn = document.getElementById('openModalBtn');
-    const cancleModalBtn = document.getElementById('cancleModalBtn');
+    const cancelModalBtn = document.getElementById('cancelModalBtn');
 
     // Help toggle the modal
     const toggleModal = () => modal.classList.toggle('hidden');
 
     // When clicked, toggle the modal
     openModalBtn.addEventListener('click', toggleModal);
-    cancleModalBtn.addEventListener('click', toggleModal);
+    cancelModalBtn.addEventListener('click', toggleModal);
 
     // Close modal when clicked outside
     window.addEventListener('click', (e) => {
