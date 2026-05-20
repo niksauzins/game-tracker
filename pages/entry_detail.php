@@ -23,8 +23,14 @@ if (!$entry) {
     exit;
 }
 
-// TODO: Get sessions and calculate total time played
-$total_hours = 0;
+// Get all sessions for this entry
+$stmt = $conn->prepare('SELECT * FROM sessions WHERE entry_id = ? ORDER BY played_at DESC');
+$stmt->bind_param('i', $entry_id);
+$stmt->execute();
+$sessions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+$total_minutes = array_sum(array_column($sessions, 'duration_minutes'));
+$total_hours = round($total_minutes / 60, 1);
 
 $pageTitle = $entry['title'] . ' Tracking';
 ?>
@@ -76,9 +82,41 @@ $pageTitle = $entry['title'] . ' Tracking';
                     <h2 class="text-xl font-bold text-gray-900 mb-2">Session History</h2>
                     <button id="openSessionModalBtn" class="bg-green-600 rounded-md text-white font-medium text-xs px-3 py-1.5">+ Log Session</button>
                 </div>
-                <div class="text-sm italic text-gray-600">
-                    <p>No sessions tracked yet.</p>
-                </div>
+
+                <?php if (empty($sessions)): ?>
+                    <p class="text-sm italic text-gray-600">No sessions tracked yet.</p>
+                <?php else: ?>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-gray-600">
+                            <thead>
+                                <tr class="bg-gray-100 text-gray-700 text-xs uppercase border-b">
+                                    <th class="p-3">Date</th>
+                                    <th class="p-3">Duration</th>
+                                    <th class="p-3">Session Notes</th>
+                                    <th class="p-3"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($sessions as $session): ?>
+                                    <tr class="border-b hover:bg-gray-50 transition">
+                                        <td class="p-3 font-medium text-gray-700"><?= htmlspecialchars($session['played_at']) ?></td>
+                                        <td class="p-3"><?= htmlspecialchars($session['duration_minutes']) ?> mins</td>
+                                        <td class="p-3 text-gray-500 max-w-xs">
+                                            <?= htmlspecialchars($session['notes'] ?? '-') ?>
+                                        </td>
+                                        <td class="py-3 pr-2">
+                                            <form action="../actions/delete_session.php" method="POST" onsubmit="return confirm('Are you sure you want to delete this session?');">
+                                                <input type="hidden" name="session_id" value="<?= $session['id'] ?>">
+                                                <input type="hidden" name="entry_id" value="<?= $session['entry_id'] ?>">
+                                                <button type="submit" class="bg-red-600 text-white px-1.5 py-1.5 rounded-md text-xs"><i class="fa-solid fa-trash"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -91,7 +129,7 @@ $pageTitle = $entry['title'] . ' Tracking';
         <h2 class="font-bold text-2xl text-gray-800 mb-4 w-full border-b pb-3">Update Details</h2>
 
         <form action="../actions/edit_entry.php" method="POST">
-            <input type="hidden" name="entry_id" id="entry_id" value="<?= $entry_id ?>">
+            <input type="hidden" name="entry_id" value="<?= $entry_id ?>">
 
             <div class="grid grid-cols-2 gap-3 mb-3">
                 <div>
@@ -148,11 +186,44 @@ $pageTitle = $entry['title'] . ' Tracking';
         <p class="text-gray-700 mb-4">Are you sure you want to remove <span class="font-bold"><?= htmlspecialchars($entry['title']) ?></span> from your entries?</p>
 
         <form action="../actions/delete_entry.php" method="POST">
-            <input type="hidden" name="entry_id" id="entry_id" value="<?= htmlspecialchars($entry['id']) ?>">
+            <input type="hidden" name="entry_id" value="<?= htmlspecialchars($entry['id']) ?>">
 
             <div class="flex justify-end gap-2">
                 <button type="button" id="closeRemoveModalBtn" class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg">Cancel</button>
                 <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg shadow">Remove</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add session -->
+<div id="sessionModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center transition-opacity duration-300 z-50">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 mx-4 transform transition-all duration-300">
+        <h2 class="font-bold text-2xl text-gray-800 mb-4 w-full border-b pb-3">Log New Session</h2>
+
+        <form action="../actions/add_session.php" method="POST">
+            <input type="hidden" name="entry_id" value="<?= $entry_id ?>">
+
+            <div class="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                    <label for="played_at" class="block font-medium text-sm text-gray-700 mb-1">Date Played</label>
+                    <input type="date" name="played_at" id="played_at" required value="<?= date('Y-m-d') ?>" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div>
+                    <label for="duration_minutes" class="block font-medium text-sm text-gray-700 mb-1">Duration (Minutes)</label>
+                    <input type="number" name="duration_minutes" id="duration_minutes" placeholder="e.g. 90" required class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+
+            <div class="mb-5">
+                <label for="notes" class="block font-medium text-sm text-gray-700 mb-1">Session Notes (optional)</label>
+                <textarea name="notes" id="notes" rows="3" placeholder="What milestones did you hit?" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            </div>
+
+            <div class="flex justify-end gap-2">
+                <button type="button" id="closeSessionModalBtn" class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg">Cancel</button>
+                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg shadow">Log Session</button>
             </div>
         </form>
     </div>
@@ -168,9 +239,14 @@ $pageTitle = $entry['title'] . ' Tracking';
     const openRemoveModalBtn = document.getElementById('openRemoveModalBtn');
     const closeRemoveModalBtn = document.getElementById('closeRemoveModalBtn');
 
+    const sessionModal = document.getElementById('sessionModal');
+    const openSessionModalBtn = document.getElementById('openSessionModalBtn');
+    const closeSessionModalBtn = document.getElementById('closeSessionModalBtn');
+
     // Modal visibility toggles
     const toggleUpdateModal = () => updateModal.classList.toggle('hidden');
     const toggleRemoveModal = () => removeModal.classList.toggle('hidden');
+    const toggleSessionModal = () => sessionModal.classList.toggle('hidden');
 
     // Event listeners for buttons
     if (openUpdateModalBtn) openUpdateModalBtn.addEventListener('click', toggleUpdateModal);
@@ -179,6 +255,9 @@ $pageTitle = $entry['title'] . ' Tracking';
     if (openRemoveModalBtn) openRemoveModalBtn.addEventListener('click', toggleRemoveModal);
     if (closeRemoveModalBtn) closeRemoveModalBtn.addEventListener('click', toggleRemoveModal);
 
+    if (openSessionModalBtn) openSessionModalBtn.addEventListener('click', toggleSessionModal);
+    if (closeSessionModalBtn) closeSessionModalBtn.addEventListener('click', toggleSessionModal);
+
     // Event listener for clicking outside the modal
     window.addEventListener('click', (e) => {
         if (e.target === updateModal) {
@@ -186,6 +265,9 @@ $pageTitle = $entry['title'] . ' Tracking';
         }
         if (e.target === removeModal) {
             toggleRemoveModal();
+        }
+        if (e.target === sessionModal) {
+            toggleSessionModal();
         }
     });
 </script>
