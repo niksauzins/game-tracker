@@ -18,6 +18,7 @@ require_once __DIR__ . '/../config/db.php';
             <?php if (isLoggedIn()): ?>
                 <a href="/pages/dashboard.php">Dashboard</a>
                 <a href="/pages/games.php">Games</a>
+                <a href="/pages/entries.php">My Entries</a>
             <?php else: ?>
                 <a href="/">Home</a>
             <?php endif; ?>

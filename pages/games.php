@@ -32,6 +32,7 @@ $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             <!-- Loop through all games and display a card -->
             <?php foreach ($games as $game): ?>
                 <div id="game-<?= htmlspecialchars($game['id']) ?>" class="relative group border rounded-lg max-w-[300px] w-full shadow-sm hover:shadow-md transition">
+
                     <a href="../pages/game_detail.php?id=<?= htmlspecialchars($game['id']) ?>" class="absolute inset-0 z-10"></a>
 
                     <div class="relative mb-2 border-b border-gray-200 overflow-hidden rounded-t-lg h-[180px]">
@@ -39,13 +40,21 @@ $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                         <p class="absolute top-0 left-0 m-2 text-xs text-white bg-black/70 px-2 py-1 rounded z-20"><?= htmlspecialchars($game['genre']) ?></p>
                     </div>
 
-                    <div class="px-4 pb-4">
+                    <div class="px-4 pb-5">
                         <h2 class="flex justify-between items-center font-semibold text-lg mb-1">
                             <?= htmlspecialchars($game['title']) ?>
                             <span class="font-normal text-sm text-gray-500"><?= htmlspecialchars($game['release_year']) ?></span>
                         </h2>
                         <p class="text-sm text-gray-600 line-clamp-3"><?= htmlspecialchars($game['description']) ?></p>
                     </div>
+
+                    <form action="../actions/add_entry.php" method="POST" class="relative z-20 text-center mb-4">
+                        <input type="hidden" name="game_id" value="<?= htmlspecialchars($game['id']) ?>">
+
+                        <button type="submit" class="px-6 py-1.5 bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg text-sm transition duration-200 shadow-sm">
+                            Add to Entries
+                        </button>
+                    </form>
 
                 </div>
             <?php endforeach; ?>

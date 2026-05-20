@@ -1,0 +1,42 @@
+<?php
+session_start();
+require_once '../config/db.php';
+requireLogin();
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: ../pages/entries.php');
+    exit;
+}
+
+// Form values
+$entry_id = intval($_POST['entry_id'] ?? 0);
+$status = trim($_POST['status'] ?? 'waitlist');
+$rating = isset($_POST['rating']) && $_POST['rating'] !== '' ? intval($_POST['rating']) : null;
+$started_at = !empty($_POST['started_at']) ? $_POST['started_at'] : null;
+$finished_at = !empty($_POST['finished_at']) ? $_POST['finished_at'] : null;
+$notes = trim($_POST['notes'] ?? '');
+
+// Validate data
+$allowed_statuses = ['waitlist', 'playing', 'finished', 'quit'];
+if (!in_array($status, $allowed_statuses)) {
+    header("Location: ../pages/entry_detail.php?id={$entry_id}&error=Invalid+status");
+    exit;
+}
+
+try {
+    // Update database values
+    $stmt = $conn->prepare('
+    UPDATE game_entries 
+    SET status = ?, rating = ?, started_at = ?, finished_at = ?, notes = ? 
+    WHERE id = ? AND user_id = ?
+    ');
+    $stmt->bind_param('sisssii', $status, $rating, $started_at, $finished_at, $notes, $entry_id, $_SESSION['user_id']);
+    $stmt->execute();
+
+    header("Location: ../pages/entry_detail.php?id={$entry_id}");
+    exit;
+} catch (mysqli_sql_exception $e) {
+    error_log($e->getMessage());
+    header("Location: ../pages/entry_detail.php?id={$entry_id}&error=Server+error");
+    exit;
+}
