@@ -13,22 +13,24 @@ $pageTitle = 'Login';
 
 <?php require_once '../includes/header.php' ?>
 
-<main class="min-h-screen flex justify-center items-center">
-    <div class="max-w-xs w-full">
-        <h1>Login Form</h1>
+<main class="flex-1 flex justify-center items-center p-6">
+    <div class="max-w-md w-full custom-card !p-8">
+        <h1 class="font-grotesk font-black text-4xl uppercase border-b-4 border-black pb-4 mb-6 text-center">Login</h1>
 
-        <form action="../actions/login.php" method="POST" class="flex flex-col gap-2">
-            <input type="email" name="email" placeholder="example@email.com" required class="border">
-            <input type="password" name="password" placeholder="********" required class="border">
+        <form action="../actions/login.php" method="POST" class="flex flex-col gap-5">
+            <div class="flex flex-col gap-2">
+                <label class="uppercase font-mono font-bold text-sm">Email</label>
+                <input type="email" name="email" placeholder="Enter email" required class="custom-input">
+            </div>
+            <div class="flex flex-col gap-2">
+                <label class="uppercase font-mono font-bold text-sm">Password</label>
+                <input type="password" name="password" placeholder="********" required class="custom-input">
+            </div>
 
-            <?php if ($error): ?>
-                <p class="bg-red-50 text-red-700 p-1 rounded"><?= htmlspecialchars($error) ?></p>
-            <?php endif; ?>
-
-            <button type="submit" class="bg-blue-600 text-white">Login</button>
+            <button type="submit" class="custom-btn bg-custom-yellow mt-2 text-lg">Login</button>
         </form>
 
-        <p>Don't have an account? <a href="register.php">Register</a></p>
+        <p class="font-mono mt-6 font-bold text-center uppercase text-sm">No account yet? <a href="register.php" class="text-custom-red hover:underline"> Register now</a></p>
     </div>
 </main>
 

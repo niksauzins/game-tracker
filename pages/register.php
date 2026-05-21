@@ -13,23 +13,30 @@ $pageTitle = 'Register';
 
 <?php require_once '../includes/header.php' ?>
 
-<main class="min-h-screen flex justify-center items-center">
-    <div class="max-w-xs w-full">
-        <h1>Registration Form</h1>
+<main class="flex-1 flex justify-center items-center p-6">
+    <div class="max-w-md w-full custom-card !p-8">
+        <h1 class="font-grotesk font-black text-4xl uppercase border-b-4 border-black pb-4 mb-6 text-center">Register</h1>
 
-        <form action="../actions/register.php" method="POST" class="flex flex-col gap-2">
-            <input type="text" name="username" placeholder="Username" required class="border">
-            <input type="email" name="email" placeholder="example@email.com" required class="border">
-            <input type="password" name="password" placeholder="********" required class="border">
+        <form action="../actions/register.php" method="POST" class="flex flex-col gap-5">
+            <div class="flex flex-col gap-2">
+                <label class="uppercase font-mono font-bold text-sm">Username</label>
+                <input type="text" name="username" placeholder="Choose a name" required class="custom-input">
+            </div>
 
-            <?php if ($error): ?>
-                <p class="bg-red-50 text-red-700 p-1 rounded"><?= htmlspecialchars($error) ?></p>
-            <?php endif; ?>
+            <div class="flex flex-col gap-2">
+                <label class="uppercase font-mono font-bold text-sm">Email</label>
+                <input type="email" name="email" placeholder="example@email.com" required class="custom-input">
+            </div>
 
-            <button type="submit" class="bg-blue-600 text-white">Register</button>
+            <div class="flex flex-col gap-2">
+                <label class="uppercase font-mono font-bold text-sm">Password</label>
+                <input type="password" name="password" placeholder="********" required class="custom-input">
+            </div>
+
+            <button type="submit" class="mt-2 custom-btn bg-custom-yellow text-lg ">Create account</button>
         </form>
 
-        <p>Already registered? <a href="login.php">Login</a></p>
+        <p class="font-mono mt-6 font-bold text-center uppercase text-sm">Already registered? <a href="login.php" class="text-custom-red hover:underline"> Login Here</a></p>
     </div>
 </main>
 

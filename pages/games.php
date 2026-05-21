@@ -9,95 +9,87 @@ $pageTitle = 'Game Library';
 $stmt = $conn->prepare('SELECT * FROM games');
 $stmt->execute();
 $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+// TODO: Search filter
 ?>
 
 <?php require_once '../includes/header.php' ?>
 
-<main class="min-h-screen flex justify-center items-start m-6">
-    <div class="max-w-5xl w-full border shadow-xl rounded-xl min-h-10 p-6 relative">
+<main class="flex-1 p-6 lg:p-12">
 
-        <div class="mb-6 flex justify-between items-center border-b pb-4">
-            <h1 class="text-2xl font-bold text-gray-800">Game Library</h1>
-            <button id="openModalBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg shadow transition duration-200">
+    <div class="custom-card flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
+        <div>
+            <h1 class="text-4xl font-grotesk font-black uppercase leading-none">Global Library</h1>
+            <p class="text-sm font-bold font-mono uppercase mt-2">All games</p>
+        </div>
+
+        <div class="flex w-full md:w-auto gap-4 flex-col sm:flex-row">
+            <form action="games.php" method="GET" class="flex gap-2 w-full sm:w-auto">
+                <input type="text" name="search" value="" placeholder="Search titles..." class="custom-input py-2 flex-1">
+                <button type="submit" class="custom-btn bg-custom-yellow text-sm">Search</button>
+            </form>
+
+            <button id="openModalBtn" class="custom-btn bg-custom-red text-sm shrink-0">
                 + Add Game
             </button>
         </div>
+    </div>
 
-        <div class="max-w-5xl w-full flex flex-wrap gap-4 justify-start">
-            <!-- Display message when no games found -->
-            <?php if (empty($games)): ?>
-                <p class="text-gray-500 italic">No games found.</p>
-            <?php endif; ?>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <!-- Display message when no games found -->
+        <?php if (empty($games)): ?>
+            <div class="col-span-full custom-card !bg-custom-yellow text-center py-12">
+                <p class="font-mono font-bold text-2xl uppercase mb-4">No games found.</p>
+                <a href="games.php" class="custom-btn text-sm bg-white">Clear search</a>
+            </div>
+        <?php endif; ?>
 
-            <!-- Loop through all games and display a card -->
-            <?php foreach ($games as $game): ?>
-                <div id="game-<?= htmlspecialchars($game['id']) ?>" class="relative group border rounded-lg max-w-[300px] w-full shadow-sm hover:shadow-md transition">
-
-                    <a href="../pages/game_detail.php?id=<?= htmlspecialchars($game['id']) ?>" class="absolute inset-0 z-10"></a>
-
-                    <div class="relative mb-2 border-b border-gray-200 overflow-hidden rounded-t-lg h-[180px]">
-                        <img src="<?= htmlspecialchars($game['image_url']) ?>" alt="<?= htmlspecialchars($game['title']) ?> cover image" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                        <p class="absolute top-0 left-0 m-2 text-xs text-white bg-black/70 px-2 py-1 rounded z-20"><?= htmlspecialchars($game['genre']) ?></p>
-                    </div>
-
-                    <div class="px-4 pb-5">
-                        <h2 class="flex justify-between items-center font-semibold text-lg mb-1">
-                            <?= htmlspecialchars($game['title']) ?>
-                            <span class="font-normal text-sm text-gray-500"><?= htmlspecialchars($game['release_year']) ?></span>
-                        </h2>
-                        <p class="text-sm text-gray-600 line-clamp-3"><?= htmlspecialchars($game['description']) ?></p>
-                    </div>
-
-                    <form action="../actions/add_entry.php" method="POST" class="relative z-20 text-center mb-4">
-                        <input type="hidden" name="game_id" value="<?= htmlspecialchars($game['id']) ?>">
-
-                        <button type="submit" class="px-6 py-1.5 bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg text-sm transition duration-200 shadow-sm">
-                            Add to Entries
-                        </button>
-                    </form>
-
-                </div>
-            <?php endforeach; ?>
-        </div>
+        <!-- Loop through all games and display a card -->
+        <?php foreach ($games as $game): ?>
+            <?php
+            $cardData = $game;
+            require '../includes/components/game_card.php';
+            ?>
+        <?php endforeach; ?>
     </div>
 </main>
 
 <!-- Modal with a form to add a new game -->
-<div id="gameModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center transition-opacity duration-300 z-50">
-    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 mx-4 transform transition-all duration-300">
-        <h2 class="font-bold text-2xl text-gray-800 mb-4 w-full border-b pb-3">Add new game</h2>
+<div id="gameModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center transition-opacity z-50 p-4">
+    <div class="custom-card max-w-lg w-full bg-white">
+        <h2 class="font-grotesk text-3xl font-black uppercase border-b-4 border-black pb-2 mb-6">Add new game</h2>
 
-        <form action="../actions/add_game.php" method="POST">
-            <div class="mb-3">
-                <label for="title" class="block font-medium text-sm text-gray-700 mb-1">Game Title</label>
-                <input type="text" name="title" id="title" required class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <form action="../actions/add_game.php" method="POST" class="flex flex-col gap-4">
+            <div class="flex flex-col gap-1">
+                <label for="title" class="uppercase font-mono text-sm font-bold">Title</label>
+                <input type="text" name="title" id="title" required class="custom-input">
             </div>
 
-            <div class="grid grid-cols-2 gap-3 mb-3">
-                <div>
-                    <label for="genre" class="block font-medium text-sm text-gray-700 mb-1">Genre</label>
-                    <input type="text" name="genre" id="genre" required placeholder="e.g. RPG, Action" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <div class="grid grid-cols-2 gap-4">
+                <div class="flex flex-col gap-1">
+                    <label for="genre" class="uppercase font-mono text-sm font-bold">Genre</label>
+                    <input type="text" name="genre" id="genre" required placeholder="e.g. RPG, Action" class="custom-input">
                 </div>
 
-                <div>
-                    <label for="release_year" class="block font-medium text-sm text-gray-700 mb-1">Release Year</label>
-                    <input type="number" name="release_year" id="release_year" required min="1950" max="2050" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <div class="flex flex-col gap-1">
+                    <label for="release_year" class="uppercase font-mono text-sm font-bold">Year</label>
+                    <input type="number" name="release_year" id="release_year" required min="1950" max="2050" class="custom-input">
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label for="image_url" class="block font-medium text-sm text-gray-700 mb-1">Image URL</label>
-                <input type="text" name="image_url" id="image_url" required placeholder="https://..." class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <div class="flex flex-col gap-1">
+                <label for="image_url" class="uppercase font-mono text-sm font-bold">Cover Image URL</label>
+                <input type="text" name="image_url" id="image_url" required placeholder="https://..." class="custom-input">
             </div>
 
-            <div class="mb-5">
-                <label for="description" class="block font-medium text-sm text-gray-700 mb-1">Description</label>
-                <textarea type="text" name="description" id="description" required rows="3" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            <div class="flex flex-col gap-1 mb-4">
+                <label for="description" class="uppercase font-mono text-sm font-bold">Description</label>
+                <textarea type="text" name="description" id="description" required rows="3" class="custom-input"></textarea>
             </div>
 
-            <div class="flex justify-end gap-2">
-                <button type="button" id="cancelModalBtn" class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg">Cancel</button>
-                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow">Save Game</button>
+            <div class="flex justify-end gap-4 border-t-4 border-black pt-6">
+                <button type="button" id="cancelModalBtn" class="custom-btn bg-white">Cancel</button>
+                <button type="submit" class="custom-btn !bg-custom-teal text-lg">Save Game</button>
             </div>
         </form>
     </div>
@@ -113,8 +105,8 @@ $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     const toggleModal = () => modal.classList.toggle('hidden');
 
     // When clicked, toggle the modal
-    openModalBtn.addEventListener('click', toggleModal);
-    cancelModalBtn.addEventListener('click', toggleModal);
+    if (openModalBtn) openModalBtn.addEventListener('click', toggleModal);
+    if (cancelModalBtn) cancelModalBtn.addEventListener('click', toggleModal);
 
     // Close modal when clicked outside
     window.addEventListener('click', (e) => {

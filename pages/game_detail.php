@@ -23,41 +23,43 @@ $pageTitle = $game['title'];
 
 <?php require_once '../includes/header.php' ?>
 
-<main class="min-h-screen flex justify-center items-start m-6">
-    <div class="max-w-3xl w-full border shadow-xl rounded-xl relative pb-6 bg-white overflow-hidden">
+<main class="flex-1 p-6 lg:p-12 flex flex-col items-center">
 
-        <div class="relative border-b border-gray-200 overflow-hidden h-[400px]">
-            <img src="<?= htmlspecialchars($game['image_url']) ?>" alt="<?= htmlspecialchars($game['title']) ?> cover image" class="w-full h-full object-cover">
-            <p class="absolute bottom-0 left-0 m-4 text-sm font-semibold text-white bg-black/70 px-3 py-1.5 rounded z-20">
+    <div class="w-full max-w-4xl mb-6">
+        <a href="games.php" class="custom-btn bg-white text-sm"><i class="fa-solid fa-arrow-left mr-2"></i> Back to Library</a>
+    </div>
+    <div class="max-w-4xl w-full custom-card p-0 flex flex-col bg-white overflow-hidden">
+
+        <div class="relative border-b-4 border-black h-[400px]">
+            <img src="<?= htmlspecialchars($game['image_url']) ?>" alt="<?= htmlspecialchars($game['title']) ?> cover" class="w-full h-full object-cover">
+            <p class="absolute top-4 left-4 font-mono bg-custom-yellow font-bold uppercase px-4 py-2 custom-border text-lg">
                 <?= htmlspecialchars($game['genre']) ?>
             </p>
 
             <?php if (isAdmin()): ?>
                 <!-- Show edit button only for admins -->
-                <div class="flex gap-2 absolute top-0 right-0 m-4">
-                    <button id="showEditModalBtn" class="text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded z-20">
+                <div class="flex gap-3 absolute top-4 right-4">
+                    <button id="showEditModalBtn" class="custom-btn !bg-custom-yellow text-sm">
                         Edit
                     </button>
-                    <button id="showDeleteModalBtn" class="text-sm font-semibold text-white bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded z-20">
+                    <button id="showDeleteModalBtn" class="custom-btn !bg-custom-red text-sm">
                         Delete
                     </button>
                 </div>
             <?php endif; ?>
         </div>
 
-        <div class="px-6 mt-6">
-            <div class="flex md:flex-row flex-col justify-between items-center border-b pb-4">
-                <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight mb-4 md:mb-1">
+        <div class="p-8">
+            <div class="flex md:flex-row flex-col justify-between items-center border-b-4 border-black pb-2">
+                <h1 class="text-5xl font-grotesk font-black uppercase mb-4 md:mb-1">
                     <?= htmlspecialchars($game['title']) ?>
                 </h1>
-                <span class="text-lg font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                <span class="text-2xl font-bold text-white font-mono bg-black px-3 py-1">
                     <?= htmlspecialchars($game['release_year']) ?>
                 </span>
             </div>
 
-            <p class="text-gray-700 leading-relaxed text-base whitespace-pre-line">
-                <?= htmlspecialchars($game['description']) ?>
-            </p>
+            <p class="text-lg font-mono leading-relaxed whitespace-pre-line custom-card !bg-custom-bg mt-6"><?= htmlspecialchars($game['description']) ?></p>
         </div>
 
     </div>
@@ -65,61 +67,59 @@ $pageTitle = $game['title'];
 
 <?php if (isAdmin()): ?>
     <!-- Modal to edit game info, only for admins -->
-    <div id="editModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center transition-opacity duration-300 z-50">
-        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 mx-4 transform transition-all duration-300">
-            <h2 class="font-bold text-2xl text-gray-800 mb-4 w-full border-b pb-3">Edit Game Info</h2>
+    <div id="editModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center transition-opacity z-50 p-4">
+        <div class="custom-card max-w-lg w-full bg-white">
+            <h2 class="font-grotesk text-3xl font-black uppercase border-b-4 border-black pb-2 mb-6">Edit game</h2>
 
-            <form action="../actions/edit_game.php" method="POST">
-                <input type="hidden" name="game_id" id="game_id" value="<?= htmlspecialchars($game['id']) ?>">
-
-                <div class="mb-3">
-                    <label for="title" class="block font-medium text-sm text-gray-700 mb-1">Game Title</label>
-                    <input type="text" name="title" id="title" required class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" value="<?= htmlspecialchars($game['title']) ?>">
+            <form action="../actions/edit_game.php" method="POST" class="flex flex-col gap-4">
+                <div class="flex flex-col gap-1">
+                    <label for="title" class="uppercase font-mono text-sm font-bold">Title</label>
+                    <input type="text" name="title" id="title" value="<?= htmlspecialchars($game['title']) ?>" required class="custom-input">
                 </div>
 
-                <div class="grid grid-cols-2 gap-3 mb-3">
-                    <div>
-                        <label for="genre" class="block font-medium text-sm text-gray-700 mb-1">Genre</label>
-                        <input type="text" name="genre" id="genre" required placeholder="e.g. RPG, Action" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" value="<?= htmlspecialchars($game['genre']) ?>">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1">
+                        <label for="genre" class="uppercase font-mono text-sm font-bold">Genre</label>
+                        <input type="text" name="genre" id="genre" value="<?= htmlspecialchars($game['genre']) ?>" required placeholder="e.g. RPG, Action" class="custom-input">
                     </div>
 
-                    <div>
-                        <label for="release_year" class="block font-medium text-sm text-gray-700 mb-1">Release Year</label>
-                        <input type="number" name="release_year" id="release_year" required min="1950" max="2050" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" value="<?= htmlspecialchars($game['release_year']) ?>">
+                    <div class="flex flex-col gap-1">
+                        <label for="release_year" class="uppercase font-mono text-sm font-bold">Year</label>
+                        <input type="number" name="release_year" id="release_year" value="<?= htmlspecialchars($game['release_year']) ?>" required min="1950" max="2050" class="custom-input">
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="image_url" class="block font-medium text-sm text-gray-700 mb-1">Image URL</label>
-                    <input type="text" name="image_url" id="image_url" required placeholder="https://..." class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" value="<?= htmlspecialchars($game['image_url']) ?>">
+                <div class="flex flex-col gap-1">
+                    <label for="image_url" class="uppercase font-mono text-sm font-bold">Cover Image URL</label>
+                    <input type="text" name="image_url" id="image_url" value="<?= htmlspecialchars($game['image_url']) ?>" required placeholder="https://..." class="custom-input">
                 </div>
 
-                <div class="mb-5">
-                    <label for="description" class="block font-medium text-sm text-gray-700 mb-1">Description</label>
-                    <textarea type="text" name="description" id="description" required rows="3" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"><?= htmlspecialchars($game['description']) ?></textarea>
+                <div class="flex flex-col gap-1 mb-4">
+                    <label for="description" class="uppercase font-mono text-sm font-bold">Description</label>
+                    <textarea type="text" name="description" id="description" required rows="3" class="custom-input"><?= htmlspecialchars($game['description']) ?></textarea>
                 </div>
 
-                <div class="flex justify-end gap-2">
-                    <button type="button" id="cancelEditModalBtn" class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg">Cancel</button>
-                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 rounded-lg shadow">Save</button>
+                <div class="flex justify-end gap-4 border-t-4 border-black pt-6">
+                    <button type="button" id="cancelEditModalBtn" class="custom-btn bg-white">Cancel</button>
+                    <button type="submit" class="custom-btn !bg-custom-yellow text-lg">Save Changes</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Modal to confirm game deletion, only for admins -->
-    <div id="deleteModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center transition-opacity duration-300 z-50">
-        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 mx-4 transform transition-all duration-300">
-            <h2 class="font-bold text-2xl text-gray-800 mb-4 w-full border-b pb-3">Delete Confirmation</h2>
+    <div id="deleteModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center transition-opacity z-50 p-4">
+        <div class="custom-card max-w-md w-full bg-white">
+            <h2 class="font-grotesk text-3xl font-black uppercase border-b-4 border-black pb-2 mb-4 text-center text-custom-red">Warning</h2>
 
-            <p class="text-gray-700 mb-4">Are you sure you want to delete <span class="font-bold"><?= htmlspecialchars($game['title']) ?></span>?</p>
+            <p class="font-mono font-bold uppercase mb-4 text-lg text-center">Delete <span class="text-white bg-black px-2 py-1"><?= htmlspecialchars($game['title']) ?></span> from the database?</p>
 
-            <form action="../actions/delete_game.php" method="POST">
+            <form action="../actions/delete_game.php" method="POST" class="mt-8 mb-4">
                 <input type="hidden" name="game_id" id="game_id" value="<?= htmlspecialchars($game['id']) ?>">
 
-                <div class="flex justify-end gap-2">
-                    <button type="button" id="cancelDeleteModalBtn" class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg">Cancel</button>
-                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg shadow">Delete</button>
+                <div class="flex justify-end gap-4 justify-center">
+                    <button type="button" id="cancelDeleteModalBtn" class="custom-btn bg-white">Cancel</button>
+                    <button type="submit" class="custom-btn !bg-custom-red">Confirm delete</button>
                 </div>
             </form>
         </div>

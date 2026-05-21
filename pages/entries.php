@@ -7,7 +7,7 @@ $pageTitle = 'My Entries';
 
 // Get all user added games
 $stmt = $conn->prepare('
-    SELECT games.*, game_entries.id AS entry_id
+    SELECT games.*, game_entries.id AS entry_id, game_entries.status
     FROM games
     INNER JOIN game_entries ON games.id = game_entries.game_id
     WHERE game_entries.user_id = ?
@@ -15,53 +15,37 @@ $stmt = $conn->prepare('
 $stmt->bind_param('i', $_SESSION['user_id']);
 $stmt->execute();
 $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+// TODO: Status filter
 ?>
 
 <?php require_once '../includes/header.php' ?>
 
-<main class="min-h-screen flex justify-center items-start m-6">
-    <div class="max-w-5xl w-full border shadow-xl rounded-xl min-h-10 p-6 relative">
+<main class="flex-1 p-6 lg:p-12">
 
-        <div class="mb-6 flex justify-between items-center border-b pb-4">
-            <h1 class="text-2xl font-bold text-gray-800">My Entries</h1>
+    <div class="custom-card flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
+        <div>
+            <h1 class="text-4xl font-grotesk font-black uppercase leading-none">My entries</h1>
+            <p class="text-sm font-bold font-mono uppercase mt-2">Active games</p>
         </div>
+    </div>
 
-        <div class="max-w-5xl w-full flex flex-wrap gap-4 justify-start">
-            <!-- Display message when no games found -->
-            <?php if (empty($games)): ?>
-                <p class="text-gray-500 italic">No games found.</p>
-            <?php endif; ?>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Loop through all games and display a card -->
+        <?php foreach ($games as $game): ?>
+            <?php
+            $cardData = $game;
+            $cardData['is_entry'] = true;
+            require '../includes/components/game_card.php';
+            ?>
+        <?php endforeach; ?>
 
-            <!-- Loop through all games and display a card -->
-            <?php foreach ($games as $game): ?>
-                <div id="game-<?= htmlspecialchars($game['id']) ?>" class="relative group border rounded-lg max-w-[300px] w-full shadow-sm hover:shadow-md transition">
-                    <a href="../pages/entry_detail.php?id=<?= htmlspecialchars($game['entry_id']) ?>" class="absolute inset-0 z-10"></a>
-
-                    <div class="relative mb-2 border-b border-gray-200 overflow-hidden rounded-t-lg h-[180px]">
-                        <img src="<?= htmlspecialchars($game['image_url']) ?>" alt="<?= htmlspecialchars($game['title']) ?> cover image" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                        <p class="absolute top-0 left-0 m-2 text-xs text-white bg-black/70 px-2 py-1 rounded z-20"><?= htmlspecialchars($game['genre']) ?></p>
-                    </div>
-
-                    <div class="px-4 pb-4">
-                        <h2 class="flex justify-between items-center font-semibold text-lg mb-1">
-                            <?= htmlspecialchars($game['title']) ?>
-                            <span class="font-normal text-sm text-gray-500"><?= htmlspecialchars($game['release_year']) ?></span>
-                        </h2>
-                        <p class="text-sm text-gray-600 line-clamp-3"><?= htmlspecialchars($game['description']) ?></p>
-                    </div>
-
-                </div>
-            <?php endforeach; ?>
-
-            <div class="relative flex justify-center items-center flex-col group border-2 border-dashed border-gray-400 rounded-lg max-w-[300px] w-full min-h-[300px] shadow-sm hover:shadow-md transition bg-gray-200">
-                <a href="../pages/games.php" class="absolute inset-0 z-10"></a>
-
-                <div class="text-3xl font-bold text-gray-500">+</div>
-
-                <div class="font-medium text-gray-500">New Entry</div>
-
+        <a href="../pages/games.php" class="flex justify-center items-center flex-col bg-custom-bg h-full min-h-[300px] group border-4 border-dashed border-gray-400 hover:bg-custom-teal custom-hover hover:custom-border hover:border-solid transition-all duration-200">
+            <div class="text-center text-xl font-mono font-black uppercase text-gray-400 group-hover:text-black transition-all">
+                <div class="text-5xl mb-2">+</div>
+                <div class="bg-white px-4 border-2 border-gray-400 text-base group-hover:border-black transition-all">Add game</div>
             </div>
-        </div>
+        </a>
     </div>
 </main>
 
