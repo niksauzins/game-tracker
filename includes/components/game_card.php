@@ -5,10 +5,12 @@ $description = htmlspecialchars($cardData['description']);
 $genre = htmlspecialchars($cardData['genre']);
 $release_year = htmlspecialchars($cardData['release_year']);
 $image_url = htmlspecialchars($cardData['image_url']);
+
+$status = htmlspecialchars($cardData['status'] ?? 'Unknown');
 $isEntry = $cardData['is_entry'] ?? false;
 $entryId = $cardData['entry_id'] ?? null;
+$isAlreadyAdded = !empty($entryId);
 $link = $isEntry ? "entry_detail.php?id={$entryId}" : "game_detail.php?id={$id}";
-$status = htmlspecialchars($cardData['status'] ?? 'Unknown');
 ?>
 
 <div class="custom-card relative flex flex-col h-full bg-white custom-hover group overflow-hidden">
@@ -35,7 +37,7 @@ $status = htmlspecialchars($cardData['status'] ?? 'Unknown');
 
     </div>
 
-    <?php if (!$isEntry): ?>
+    <?php if (!$isAlreadyAdded): ?>
         <form action="../actions/add_entry.php" method="POST" class="relative z-30 mt-auto pt-2">
             <input type="hidden" name="game_id" value="<?= $id ?>">
             <button type="submit" class="custom-btn !bg-custom-teal w-full text-sm">Add to entries</button>

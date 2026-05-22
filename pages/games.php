@@ -9,11 +9,21 @@ $search = trim($_GET['search'] ?? '');
 
 // Get all games with optional search
 if ($search) {
-    $stmt = $conn->prepare('SELECT * FROM games WHERE title LIKE ? OR genre LIKE ?');
+    $stmt = $conn->prepare('
+        SELECT g.*, ge.status, ge.id AS entry_id 
+        FROM games g
+        LEFT JOIN game_entries ge ON g.id = ge.game_id AND ge.user_id = ?
+        WHERE g.title LIKE ? OR g.genre LIKE ?
+    ');
     $like = "%{$search}%";
-    $stmt->bind_param('ss', $like, $like);
+    $stmt->bind_param('iss', $_SESSION['user_id'], $like, $like);
 } else {
-    $stmt = $conn->prepare('SELECT * FROM games');
+    $stmt = $conn->prepare('
+        SELECT g.*, ge.status, ge.id AS entry_id 
+        FROM games g
+        LEFT JOIN game_entries ge ON g.id = ge.game_id AND ge.user_id = ?
+    ');
+    $stmt->bind_param('i', $_SESSION['user_id']);
 }
 
 $stmt->execute();
