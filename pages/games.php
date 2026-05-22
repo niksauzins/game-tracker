@@ -5,12 +5,19 @@ requireLogin();
 
 $pageTitle = 'Game Library';
 
-// Get all games
-$stmt = $conn->prepare('SELECT * FROM games');
+$search = trim($_GET['search'] ?? '');
+
+// Get all games with optional search
+if ($search) {
+    $stmt = $conn->prepare('SELECT * FROM games WHERE title LIKE ? OR genre LIKE ?');
+    $like = "%{$search}%";
+    $stmt->bind_param('ss', $like, $like);
+} else {
+    $stmt = $conn->prepare('SELECT * FROM games');
+}
+
 $stmt->execute();
 $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-
-// TODO: Search filter
 ?>
 
 <?php require_once '../includes/header.php' ?>
@@ -25,7 +32,7 @@ $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
         <div class="flex w-full md:w-auto gap-4 flex-col sm:flex-row">
             <form action="games.php" method="GET" class="flex gap-2 w-full sm:w-auto">
-                <input type="text" name="search" value="" placeholder="Search titles..." class="custom-input py-2 flex-1">
+                <input type="text" name="search" value="<?= $search ?>" placeholder="Search titles..." class="custom-input py-2 flex-1">
                 <button type="submit" class="custom-btn bg-custom-yellow text-sm">Search</button>
             </form>
 
