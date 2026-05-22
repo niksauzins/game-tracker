@@ -5,18 +5,32 @@ requireLogin();
 
 $pageTitle = 'My Entries';
 
-// Get all user added games
-$stmt = $conn->prepare('
-    SELECT games.*, game_entries.id AS entry_id, game_entries.status
-    FROM games
-    INNER JOIN game_entries ON games.id = game_entries.game_id
-    WHERE game_entries.user_id = ?
-');
-$stmt->bind_param('i', $_SESSION['user_id']);
+$userId = $_SESSION['user_id'];
+$status = trim($_GET['status'] ?? '');
+
+// Get all user added games with optional filters
+if ($status) {
+    $stmt = $conn->prepare('
+        SELECT games.*, game_entries.id AS entry_id, game_entries.status
+        FROM games
+        INNER JOIN game_entries ON games.id = game_entries.game_id
+        WHERE game_entries.user_id = ? AND status = ?
+    ');
+    $stmt->bind_param('is', $userId, $status);
+} else {
+    $stmt = $conn->prepare('
+        SELECT games.*, game_entries.id AS entry_id, game_entries.status
+        FROM games
+        INNER JOIN game_entries ON games.id = game_entries.game_id
+        WHERE game_entries.user_id = ?
+    ');
+    $stmt->bind_param('i', $userId);
+}
+
 $stmt->execute();
 $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-// TODO: Status filter
+$subtitle = $status ? "{$status} games" : 'All games';
 ?>
 
 <?php require_once '../includes/header.php' ?>
@@ -26,7 +40,14 @@ $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     <div class="custom-card flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
         <div>
             <h1 class="text-4xl font-grotesk font-black uppercase leading-none">My entries</h1>
-            <p class="text-sm font-bold font-mono uppercase mt-2">Active games</p>
+            <p class="text-sm font-bold font-mono uppercase mt-2"><?= htmlspecialchars($subtitle) ?></p>
+        </div>
+
+        <div class="flex w-full md:w-auto gap-4 flex-col sm:flex-row">
+            <a href="entries.php" class="custom-btn text-sm <?= $status === '' ? 'bg-custom-red' : '' ?>">All</a>
+            <a href="?status=playing" class="custom-btn text-sm <?= $status === 'playing' ? 'bg-custom-red' : '' ?>">Playing</a>
+            <a href="?status=waitlist" class="custom-btn text-sm <?= $status === 'waitlist' ? 'bg-custom-red' : '' ?>">Waitlist</a>
+            <a href="?status=finished" class="custom-btn text-sm <?= $status === 'finished' ? 'bg-custom-red' : '' ?>">Finished</a>
         </div>
     </div>
 
