@@ -7,7 +7,6 @@ if (isLoggedIn()) {
     exit;
 }
 
-$error = $_GET['error'] ?? '';
 $pageTitle = 'Login';
 ?>
 
@@ -24,10 +23,12 @@ $pageTitle = 'Login';
             </div>
             <div class="flex flex-col gap-2">
                 <label class="uppercase font-mono font-bold text-sm">Password</label>
-                <input type="password" name="password" placeholder="********" required class="custom-input">
+                <input type="password" name="password" placeholder="********" required class="custom-input mt-2">
             </div>
 
-            <button type="submit" class="custom-btn bg-custom-yellow mt-2 text-lg">Login</button>
+            <?php renderFlash('-mt-2') ?>
+
+            <button type="submit" class="custom-btn bg-custom-yellow text-lg">Login</button>
         </form>
 
         <p class="font-mono mt-6 font-bold text-center uppercase text-sm">No account yet? <a href="register.php" class="text-custom-red hover:underline"> Register now</a></p>

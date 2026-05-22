@@ -49,6 +49,7 @@ $lastPlayed = $stmt->get_result()->fetch_assoc()['title'] ?? 'None';
 <?php require_once '../includes/header.php' ?>
 
 <main class="flex-1 p-6 lg:p-12">
+    <?php renderFlash() ?>
 
     <div class="custom-card flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
         <div>

@@ -3,6 +3,11 @@ session_start();
 require_once '../config/db.php';
 requireLogin();
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: ../pages/entries.php');
+    exit;
+}
+
 // Get game and user id
 $game_id = intval($_POST['game_id'] ?? 0);
 $user_id = intval($_SESSION['user_id'] ?? 0);
@@ -16,10 +21,12 @@ try {
     $stmt->execute();
 
     // Go to all entries
+    setFlash('success', 'Game added to entries');
     header('Location: ../pages/entries.php');
     exit;
 } catch (mysqli_sql_exception $e) {
     error_log($e->getMessage());
-    header('Location: ../pages/entries.php?error=Server+error');
+    setFlash('error', 'Could not save changes. Please try again.');
+    header('Location: ../pages/entries.php');
     exit;
 }

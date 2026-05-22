@@ -15,7 +15,7 @@ $game = $stmt->get_result()->fetch_assoc();
 // If no game found, go back
 if (!$game) {
     setFlash('error', 'Game not found');
-    header('Location: ../pages/games.php');
+    header('Location: games.php');
     exit;
 }
 
@@ -29,7 +29,7 @@ $pageTitle = $game['title'];
         <a href="games.php" class="custom-btn bg-white text-sm"><i class="fa-solid fa-arrow-left mr-2"></i> Back to Library</a>
     </div>
 
-    <?php renderFlash('mb-4 max-w-4xl w-full') ?>
+    <?php renderFlash('max-w-4xl w-full') ?>
 
     <div class="max-w-4xl w-full custom-card p-0 flex flex-col bg-white overflow-hidden">
 

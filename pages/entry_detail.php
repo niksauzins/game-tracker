@@ -19,7 +19,8 @@ $entry = $stmt->get_result()->fetch_assoc();
 
 // If no game found, go back
 if (!$entry) {
-    header('Location: ../pages/entries.php?error=entry_not_found');
+    setFlash('error', 'Entry not found');
+    header('Location: entries.php');
     exit;
 }
 
@@ -39,6 +40,8 @@ $pageTitle = $entry['title'] . ' Tracking';
 
 <main class="flex-1 p-6 lg:p-12">
     <a href="entries.php" class="custom-btn bg-white text-sm mb-6"><i class="fa-solid fa-arrow-left mr-2"></i> Back to Entries</a>
+
+    <?php renderFlash() ?>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
 
