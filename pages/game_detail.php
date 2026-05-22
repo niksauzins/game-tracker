@@ -14,7 +14,8 @@ $game = $stmt->get_result()->fetch_assoc();
 
 // If no game found, go back
 if (!$game) {
-    header('Location: ../pages/games.php?error=game_not_found');
+    setFlash('error', 'Game not found');
+    header('Location: ../pages/games.php');
     exit;
 }
 
@@ -24,10 +25,12 @@ $pageTitle = $game['title'];
 <?php require_once '../includes/header.php' ?>
 
 <main class="flex-1 p-6 lg:p-12 flex flex-col items-center">
-
     <div class="w-full max-w-4xl mb-6">
         <a href="games.php" class="custom-btn bg-white text-sm"><i class="fa-solid fa-arrow-left mr-2"></i> Back to Library</a>
     </div>
+
+    <?php renderFlash('mb-4 max-w-4xl w-full') ?>
+
     <div class="max-w-4xl w-full custom-card p-0 flex flex-col bg-white overflow-hidden">
 
         <div class="relative border-b-4 border-black h-[400px]">
@@ -72,6 +75,8 @@ $pageTitle = $game['title'];
             <h2 class="font-grotesk text-3xl font-black uppercase border-b-4 border-black pb-2 mb-6">Edit game</h2>
 
             <form action="../actions/edit_game.php" method="POST" class="flex flex-col gap-4">
+                <input type="hidden" name="game_id" id="game_id" value="<?= htmlspecialchars($game['id']) ?>">
+
                 <div class="flex flex-col gap-1">
                     <label for="title" class="uppercase font-mono text-sm font-bold">Title</label>
                     <input type="text" name="title" id="title" value="<?= htmlspecialchars($game['title']) ?>" required class="custom-input">
