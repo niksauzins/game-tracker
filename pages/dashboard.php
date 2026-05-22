@@ -53,12 +53,12 @@ $lastPlayed = $stmt->get_result()->fetch_assoc()['title'] ?? 'None';
 
     <div class="custom-card flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
         <div>
-            <h1 class="text-4xl font-grotesk font-black uppercase leading-none">Welcome, <br><span class="text-custom-red bg-black px-3 leading-normal"><?= $_SESSION['username'] ?></span></h1>
+            <h1 class="text-3xl md:text-4xl font-grotesk font-black uppercase leading-none">Welcome, <br class="hidden sm:block"><span class="text-custom-red bg-black px-3 py-1 inline-block mt-0 leading-normal"><?= $_SESSION['username'] ?></span></h1>
         </div>
 
         <div class="flex w-full md:w-auto gap-4 flex-col sm:flex-row">
             <a href="games.php" class="custom-btn text-sm">Browse Library</a>
-            <a href="games.php" class="custom-btn text-sm bg-custom-teal">My Entries</a>
+            <a href="entries.php" class="custom-btn text-sm bg-custom-teal">My Entries</a>
         </div>
     </div>
 

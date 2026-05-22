@@ -79,31 +79,56 @@ require_once __DIR__ . '/../config/db.php';
 </head>
 
 <body class="min-h-screen flex flex-col md:flex-row text-black relative">
-    <aside class="w-full md:max-w-72 bg-custom-yellow flex flex-col border-r-4 border-black z-40 md:sticky md:top-0 md:h-screen shrink-0">
-        <div class="flex-1 p-8">
-            <h1 class="text-4xl font-semibold font-grotesk border-b-4 border-black pb-3">GAME TRACKER</h1>
+    <aside class="w-full md:max-w-72 bg-custom-yellow flex flex-col border-b-4 md:border-b-0 md:border-r-4 border-black z-40 md:sticky md:top-0 md:h-screen shrink-0">
 
-            <nav class="flex flex-col justify-between mt-8 text-lg">
-                <div class="flex flex-col gap-6 font-bold font-mono">
-                    <?php if (isLoggedIn()): ?>
-                        <a href="/pages/dashboard.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-house"></i> Dashboard</a>
-                        <a href="/pages/games.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-gamepad"></i> Library</a>
-                        <a href="/pages/entries.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-layer-group"></i> My Entries</a>
-                    <?php else: ?>
-                        <a href="/" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-house"></i> Home</a>
-                        <a href="/pages/login.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-arrow-right-to-bracket"></i> Login</a>
-                        <a href="/pages/register.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-user-plus"></i> Register</a>
-                    <?php endif; ?>
-                </div>
-            </nav>
+        <!-- Mobile navbar -->
+        <div class="flex items-center justify-between p-4 md:hidden">
+            <h1 class="text-3xl font-black font-grotesk tracking-tight">GAME TRACKER</h1>
+            <button id="mobileMenuBtn" class="custom-btn !px-3 !py-1.5 bg-white text-sm">
+                <i class="fa-solid fa-bars"></i>
+            </button>
         </div>
 
-        <?php if (isLoggedIn()): ?>
-            <div class="border-t-4 border-black bg-white p-8">
-                <p class="mb-4 font-mono font-bold text-sm">USER: <span class="uppercase text-custom-red"><?= htmlspecialchars($_SESSION['username']) ?></span></p>
-                <a href="../actions/logout.php" class="w-full custom-btn bg-black !text-white hover:!bg-custom-red">Logout</a>
+        <!-- Desktop navbar -->
+        <div id="navMenuContent" class="hidden md:flex flex-col flex-1">
+            <div class="flex-1 p-6 md:p-8 pt-2 md:pt-8">
+                <h1 class="hidden md:block text-4xl font-semibold font-grotesk border-b-4 border-black pb-3">GAME TRACKER</h1>
+
+                <nav class="flex flex-col justify-between mt-0 md:mt-8 text-lg">
+                    <div class="flex flex-col gap-5 md:gap-6 font-bold font-mono">
+                        <?php if (isLoggedIn()): ?>
+                            <a href="/pages/dashboard.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-house"></i> Dashboard</a>
+                            <a href="/pages/games.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-gamepad"></i> Library</a>
+                            <a href="/pages/entries.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-layer-group"></i> My Entries</a>
+                        <?php else: ?>
+                            <a href="/" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-house"></i> Home</a>
+                            <a href="/pages/login.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-arrow-right-to-bracket"></i> Login</a>
+                            <a href="/pages/register.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-user-plus"></i> Register</a>
+                        <?php endif; ?>
+                    </div>
+                </nav>
             </div>
-        <?php endif; ?>
+
+            <?php if (isLoggedIn()): ?>
+                <div class="border-t-4 border-black bg-white p-6 md:p-8">
+                    <p class="mb-4 font-mono font-bold text-sm">USER: <span class="uppercase text-custom-red"><?= htmlspecialchars($_SESSION['username']) ?></span></p>
+                    <a href="../actions/logout.php" class="w-full custom-btn bg-black !text-white hover:!bg-custom-red">Logout</a>
+                </div>
+            <?php endif; ?>
+        </div>
     </aside>
 
-    <div class="flex-1 min-w-0 max-w-7xl mx-auto flex flex-col min-h-screen">
+    <script>
+        const menuBtn = document.getElementById('mobileMenuBtn');
+        const menuContent = document.getElementById('navMenuContent');
+        const icon = menuBtn.querySelector('i');
+
+        // Toggle the mobile menu
+        menuBtn.addEventListener('click', () => {
+            menuContent.classList.toggle('hidden');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-xmark');
+        });
+    </script>
+
+    <div class="flex-1 w-full min-w-0 max-w-7xl mx-auto flex flex-col min-h-screen">

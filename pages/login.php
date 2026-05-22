@@ -12,7 +12,7 @@ $pageTitle = 'Login';
 
 <?php require_once '../includes/header.php' ?>
 
-<main class="flex-1 flex justify-center items-center p-6">
+<main class="md:flex-1 flex justify-center items-center p-6 pt-20">
     <div class="max-w-md w-full custom-card !p-8">
         <h1 class="font-grotesk font-black text-4xl uppercase border-b-4 border-black pb-4 mb-6 text-center">Login</h1>
 

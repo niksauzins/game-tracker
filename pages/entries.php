@@ -45,7 +45,7 @@ $subtitle = $status ? "{$status} games" : 'All games';
             <p class="text-sm font-bold font-mono uppercase mt-2"><?= htmlspecialchars($subtitle) ?></p>
         </div>
 
-        <div class="flex w-full md:w-auto gap-4 flex-col sm:flex-row">
+        <div class="flex w-full md:w-auto gap-4 flex-row flex-wrap">
             <a href="entries.php" class="custom-btn text-sm <?= $status === '' ? 'bg-custom-red' : '' ?>">All</a>
             <a href="?status=playing" class="custom-btn text-sm <?= $status === 'playing' ? 'bg-custom-red' : '' ?>">Playing</a>
             <a href="?status=waitlist" class="custom-btn text-sm <?= $status === 'waitlist' ? 'bg-custom-red' : '' ?>">Waitlist</a>

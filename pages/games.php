@@ -36,16 +36,16 @@ $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
     <?php renderFlash() ?>
 
-    <div class="custom-card flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
+    <div class="custom-card flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-6 mb-8">
         <div>
-            <h1 class="text-4xl font-grotesk font-black uppercase leading-none">Global Library</h1>
+            <h1 class="text-3xl lg:text-4xl font-grotesk font-black uppercase leading-none">Global Library</h1>
             <p class="text-sm font-bold font-mono uppercase mt-2">All games</p>
         </div>
 
         <div class="flex w-full md:w-auto gap-4 flex-col sm:flex-row">
             <form action="games.php" method="GET" class="flex gap-2 w-full sm:w-auto">
-                <input type="text" name="search" value="<?= $search ?>" placeholder="Search titles..." class="custom-input py-2 flex-1">
-                <button type="submit" class="custom-btn bg-custom-yellow text-sm">Search</button>
+                <input type="text" name="search" value="<?= $search ?>" placeholder="Search titles..." class="custom-input py-2 flex-1 w-full min-w-0">
+                <button type="submit" class="custom-btn bg-custom-yellow text-xs lg:text-sm shrink-0">Search</button>
             </form>
 
             <button id="openModalBtn" class="custom-btn bg-custom-red text-sm shrink-0">

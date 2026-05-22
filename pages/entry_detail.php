@@ -43,7 +43,7 @@ $pageTitle = $entry['title'] . ' Tracking';
 
     <?php renderFlash() ?>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
 
         <!-- Entry info -->
         <div class="custom-card p-0 flex flex-col bg-white h-max overflow-hidden">
@@ -78,7 +78,7 @@ $pageTitle = $entry['title'] . ' Tracking';
             </div>
         </div>
 
-        <div class="md:col-span-2 space-y-10">
+        <div class="md:col-span-2 space-y-6 md:space-y-10">
             <div class="custom-card">
                 <h2 class="font-grotesk uppercase text-2xl font-bold mb-3 border-b-4 border-black pb-2">Notes</h2>
                 <p class="font-mono text-sm custom-card !bg-custom-bg">
@@ -95,14 +95,14 @@ $pageTitle = $entry['title'] . ' Tracking';
                 <?php if (empty($sessions)): ?>
                     <p class="font-mono text-sm font-bold custom-card !bg-custom-bg uppercase text-center">No sessions recorded yet.</p>
                 <?php else: ?>
-                    <div class="overflow-x-auto custom-shadow custom-border bg-white">
+                    <div class="hidden md:block overflow-x-auto custom-shadow custom-border bg-white">
                         <table class="w-full text-left font-mono font-bold text-sm uppercase">
                             <thead class="bg-black text-white">
                                 <tr>
-                                    <th class="p-4 border-r-4 border-white">Date</th>
-                                    <th class="p-4 border-r-4 border-white">Length</th>
-                                    <th class="p-4 border-r-4 border-white w-1/2">Notes</th>
-                                    <th class="p-4 text-center">Action</th>
+                                    <th class="p-2 md:p-4 text-xs sm:text-sm border-r-2 sm:border-r-4 border-white">Date</th>
+                                    <th class="p-2 md:p-4 text-xs sm:text-sm border-r-2 sm:border-r-4 border-white">Length</th>
+                                    <th class="p-2 md:p-4 text-xs sm:text-sm border-r-2 sm:border-r-4 border-white w-1/2">Notes</th>
+                                    <th class="p-2 md:p-4 text-xs sm:text-sm sm:text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -124,6 +124,29 @@ $pageTitle = $entry['title'] . ' Tracking';
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Mobile session cards -->
+                    <div class="block md:hidden space-y-4">
+                        <?php foreach ($sessions as $session): ?>
+                            <div class="custom-card bg-white space-y-3">
+                                <div class="flex justify-between items-center border-b-2 border-black border-dashed pb-2">
+                                    <span class="font-mono font-bold text-sm text-gray-700"><?= htmlspecialchars($session['played_at']) ?></span>
+                                    <span class="bg-custom-teal border-2 border-black px-2 py-0.5 text-xs font-bold font-mono uppercase"><?= htmlspecialchars($session['duration_minutes']) ?> min</span>
+                                </div>
+                                <p class="font-mono text-xs text-black normal-case leading-relaxed break-words">
+                                    <span class="font-bold uppercase block text-[10px] text-gray-500 mb-1">Session Notes:</span>
+                                    <?= htmlspecialchars($session['notes'] ?? 'No notes recorded.') ?>
+                                </p>
+                                <div class="flex justify-end pt-2">
+                                    <form action="../actions/delete_session.php" method="POST" onsubmit="return confirm('Delete this session?');">
+                                        <input type="hidden" name="session_id" value="<?= $session['id'] ?>">
+                                        <input type="hidden" name="entry_id" value="<?= $session['entry_id'] ?>">
+                                        <button type="submit" class="custom-btn bg-custom-red !py-1 w-full text-xs"><i class="fa-solid fa-trash mr-1"></i>Remove session</button>
+                                    </form>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
             </div>
@@ -152,7 +175,7 @@ $pageTitle = $entry['title'] . ' Tracking';
                 </div>
 
                 <div class="flex flex-col gap-1">
-                    <label for="rating" class="uppercase font-mono text-sm font-bold">Score Rating (1-5)</label>
+                    <label for="rating" class="uppercase font-mono text-sm font-bold">Rating (1-5)</label>
                     <select name="rating" id="rating" class="custom-input">
                         <option value="">No Rating</option>
                         <?php for ($i = 5; $i >= 1; $i--): ?>
@@ -162,15 +185,15 @@ $pageTitle = $entry['title'] . ' Tracking';
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 ">
+            <div class="flex flex-col md:grid grid-cols-2 gap-4 ">
                 <div class="flex flex-col gap-1">
                     <label for="started_at" class="uppercase font-mono text-sm font-bold">Date Started</label>
-                    <input type="date" name="started_at" id="started_at" placeholder="e.g. RPG, Action" class="custom-input" value="<?= htmlspecialchars($entry['started_at'] ?? '') ?>">
+                    <input type="date" name="started_at" id="started_at" placeholder="e.g. RPG, Action" class="custom-input w-full" value="<?= htmlspecialchars($entry['started_at'] ?? '') ?>">
                 </div>
 
                 <div class="flex flex-col gap-1">
                     <label for="finished_at" class="uppercase font-mono text-sm font-bold">Date Finished</label>
-                    <input type="date" name="finished_at" id="finished_at" class="custom-input" value="<?= htmlspecialchars($entry['finished_at'] ?? '') ?>">
+                    <input type="date" name="finished_at" id="finished_at" class="custom-input w-full" value="<?= htmlspecialchars($entry['finished_at'] ?? '') ?>">
                 </div>
             </div>
 
@@ -213,10 +236,10 @@ $pageTitle = $entry['title'] . ' Tracking';
         <form action="../actions/add_session.php" method="POST" class="flex flex-col gap-4">
             <input type="hidden" name="entry_id" value="<?= $entry_id ?>">
 
-            <div class="grid grid-cols-2 gap-3 mb-3">
+            <div class="flex flex-col md:grid grid-cols-2 gap-3 mb-3">
                 <div class="flex flex-col gap-1">
                     <label for="played_at" class="uppercase font-mono text-sm font-bold">Date</label>
-                    <input type="date" name="played_at" id="played_at" required value="<?= date('Y-m-d') ?>" class="custom-input">
+                    <input type="date" name="played_at" id="played_at" required value="<?= date('Y-m-d') ?>" class="custom-input w-full">
                 </div>
 
                 <div class="flex flex-col gap-1">

@@ -33,28 +33,28 @@ $pageTitle = $game['title'];
 
     <div class="max-w-4xl w-full custom-card p-0 flex flex-col bg-white overflow-hidden">
 
-        <div class="relative border-b-4 border-black h-[400px]">
+        <div class="relative border-b-4 border-black h-56 sm:h-80 md:h-[400px]">
             <img src="<?= htmlspecialchars($game['image_url']) ?>" alt="<?= htmlspecialchars($game['title']) ?> cover" class="w-full h-full object-cover">
-            <p class="absolute top-4 left-4 font-mono bg-custom-yellow font-bold uppercase px-4 py-2 custom-border text-lg">
+            <p class="absolute top-2 md:top-4 left-2 md:left-4 font-mono bg-custom-yellow font-bold uppercase px-4 py-2 custom-border text-sm md:text-lg">
                 <?= htmlspecialchars($game['genre']) ?>
             </p>
 
             <?php if (isAdmin()): ?>
                 <!-- Show edit button only for admins -->
-                <div class="flex gap-3 absolute top-4 right-4">
-                    <button id="showEditModalBtn" class="custom-btn !bg-custom-yellow text-sm">
+                <div class="flex gap-3 absolute top-2 md:top-4 right-2 md:right-4">
+                    <button id="showEditModalBtn" class="custom-btn !bg-custom-yellow text-xs md:text-sm">
                         Edit
                     </button>
-                    <button id="showDeleteModalBtn" class="custom-btn !bg-custom-red text-sm">
+                    <button id="showDeleteModalBtn" class="custom-btn !bg-custom-red text-xs md:text-sm">
                         Delete
                     </button>
                 </div>
             <?php endif; ?>
         </div>
 
-        <div class="p-8">
+        <div class="p-4 md:p-8">
             <div class="flex md:flex-row flex-col justify-between items-center border-b-4 border-black pb-2">
-                <h1 class="text-5xl font-grotesk font-black uppercase mb-4 md:mb-1">
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-grotesk font-black uppercase mb-2 md:mb-4 md:mb-1 text-center md:text-left">
                     <?= htmlspecialchars($game['title']) ?>
                 </h1>
                 <span class="text-2xl font-bold text-white font-mono bg-black px-3 py-1">
@@ -62,7 +62,7 @@ $pageTitle = $game['title'];
                 </span>
             </div>
 
-            <p class="text-lg font-mono leading-relaxed whitespace-pre-line custom-card !bg-custom-bg mt-6"><?= htmlspecialchars($game['description']) ?></p>
+            <p class="text-sm md:text-lg font-mono leading-relaxed whitespace-pre-line custom-card !bg-custom-bg mt-6"><?= htmlspecialchars($game['description']) ?></p>
         </div>
 
     </div>
