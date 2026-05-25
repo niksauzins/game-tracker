@@ -14,6 +14,7 @@ $languageUrl = '?' . http_build_query($newParams);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $pageTitle ?? __('app_title') ?></title>
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
 
     <!-- Custom Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
