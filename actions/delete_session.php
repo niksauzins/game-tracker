@@ -23,6 +23,13 @@ try {
     $stmt->bind_param('ii', $session_id, $_SESSION['user_id']);
     $stmt->execute();
 
+    // Check if any rows were deleted
+    if ($stmt->affected_rows === 0) {
+        setFlash('error', __('flash_entry_not_found'));
+        header("Location: ../pages/entry_detail.php?id={$entry_id}");
+        exit;
+    }
+
     // Send back if successfull
     setFlash('success', __('flash_session_deleted'));
     header("Location: ../pages/entry_detail.php?id={$entry_id}");

@@ -24,6 +24,13 @@ if (!in_array($status, $allowed_statuses)) {
     exit;
 }
 
+// Finished at should be after started at
+if ($started_at && $finished_at && $started_at > $finished_at) {
+    setFlash('error', __('flash_date_order_invalid'));
+    header("Location: ../pages/entry_detail.php?id={$entry_id}");
+    exit;
+}
+
 try {
     // Update database values
     $stmt = $conn->prepare('

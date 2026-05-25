@@ -17,6 +17,13 @@ try {
     $stmt->bind_param('i', $game_id);
     $stmt->execute();
 
+    // Check if any rows were deleted
+    if ($stmt->affected_rows === 0) {
+        setFlash('error', __('flash_session_not_found'));
+        header("Location: ../pages/games.php");
+        exit;
+    }
+
     // Send back if successfull
     setFlash('success', __('flash_game_deleted'));
     header("Location: ../pages/games.php");

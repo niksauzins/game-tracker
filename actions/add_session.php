@@ -24,6 +24,13 @@ if ($entry_id <= 0 || empty($played_at) || $duration_minutes <= 0) {
     exit;
 }
 
+// Don't allow future dates
+if (!empty($played_at) && $played_at > date('Y-m-d')) {
+    setFlash('error', __('flash_session_future_date'));
+    header("Location: ../pages/entry_detail.php?id={$entry_id}");
+    exit;
+}
+
 // Make sure the entry belongs to the correct user
 $stmt = $conn->prepare('SELECT id FROM game_entries WHERE id = ? AND user_id = ?');
 $stmt->bind_param('ii', $entry_id, $_SESSION['user_id']);

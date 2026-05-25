@@ -23,6 +23,20 @@ if (empty($title) || empty($genre) || empty($release_year) || empty($image_url) 
     exit;
 }
 
+// Validate image URL
+if (!filter_var($image_url, FILTER_VALIDATE_URL)) {
+    setFlash('error', __('flash_invalid_image_url'));
+    header("Location: ../pages/game_detail.php?id={$game_id}");
+    exit;
+}
+
+// Check release date
+if ($release_year < 1950 || $release_year > 2050) {
+    setFlash('error', __('flash_invalid_release_year'));
+    header("Location: ../pages/game_detail.php?id={$game_id}");
+    exit;
+}
+
 try {
     // Update database with new values
     $stmt = $conn->prepare('UPDATE games SET title = ?, description = ?, genre = ?, release_year = ?, image_url = ? WHERE id = ?');

@@ -8,13 +8,34 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$username = trim($_POST['username']);
-$email = trim($_POST['email']);
-$password = $_POST['password'];
+$username = trim($_POST['username']) ?? '';
+$email = trim($_POST['email'] ?? '');
+$password = $_POST['password'] ?? '';
 
 // All fields are required
 if (empty($username) || empty($email) || empty($password)) {
     setFlash('error', __('flash_all_fields_required'));
+    header('Location: ../pages/register.php');
+    exit;
+}
+
+// Validate email format
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    setFlash('error', __('flash_invalid_email'));
+    header('Location: ../pages/register.php');
+    exit;
+}
+
+// Check username minimal length
+if (strlen($username) < 3) {
+    setFlash('error', __('flash_username_too_short'));
+    header('Location: ../pages/register.php');
+    exit;
+}
+
+// Check password minimal length
+if (strlen($password) < 8) {
+    setFlash('error', __('flash_password_too_short'));
     header('Location: ../pages/register.php');
     exit;
 }

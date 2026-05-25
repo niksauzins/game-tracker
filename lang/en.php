@@ -26,6 +26,13 @@ return [
 
     // Flash messages
     'flash_all_fields_required'   => 'All fields are required.',
+    'flash_invalid_email'         => 'Please enter a valid email address.',
+    'flash_password_too_short'    => 'Password must be at least 8 characters long.',
+    'flash_username_too_short'    => 'Username must be at least 3 characters long.',
+    'flash_invalid_image_url'     => 'Please provide a valid image URL.',
+    'flash_invalid_release_year'  => 'Release year must be between 1950 and 2050.',
+    'flash_session_future_date'   => 'The date cannot be in the future.',
+    'flash_date_order_invalid'    => 'The finish date must be after the start date.',
     'flash_username_email_taken'  => 'Username or email already taken.',
     'flash_register_success'      => 'Registered successfully.',
     'flash_invalid_credentials'   => 'Invalid email or password.',
@@ -40,6 +47,7 @@ return [
     'flash_entry_not_found'       => 'Entry not found.',
     'flash_session_added'         => 'Session logged.',
     'flash_session_deleted'       => 'Session deleted.',
+    'flash_session_not_found'     => 'Session not found.',
     'flash_invalid_session_inputs' => 'Invalid session data. Check the date and duration.',
     'flash_invalid_status'        => 'Invalid status.',
     'flash_unauthorized'          => 'You do not have permission to do that.',

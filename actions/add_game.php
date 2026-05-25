@@ -22,6 +22,20 @@ if (empty($title) || empty($genre) || empty($release_year) || empty($image_url) 
     exit;
 }
 
+// Validate image URL
+if (!filter_var($image_url, FILTER_VALIDATE_URL)) {
+    setFlash('error', __('flash_invalid_image_url'));
+    header('Location: ../pages/games.php');
+    exit;
+}
+
+// Check release date
+if ($release_year < 1950 || $release_year > 2050) {
+    setFlash('error', __('flash_invalid_release_year'));
+    header('Location: ../pages/games.php');
+    exit;
+}
+
 try {
     // Try to insert into database
     $stmt = $conn->prepare('INSERT INTO games (title, description, genre, release_year, image_url) VALUES (?, ?, ?, ?, ?)');

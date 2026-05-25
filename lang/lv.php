@@ -26,6 +26,13 @@ return [
 
     // Flash messages
     'flash_all_fields_required'    => 'Visi lauki ir obligāti.',
+    'flash_invalid_email'          => 'Lūdzu, ievadiet derīgu e-pasta adresi.',
+    'flash_password_too_short'     => 'Parolei jābūt vismaz 8 rakstzīmes garai.',
+    'flash_username_too_short'     => 'Lietotājvārdam jābūt vismaz 3 rakstzīmes garam.',
+    'flash_invalid_image_url'      => 'Lūdzu, norādiet derīgu attēla saiti.',
+    'flash_invalid_release_year'   => 'Izdošanas gadam jābūt robežās no 1950. līdz 2050. gadam.',
+    'flash_session_future_date'    => 'Datums nevar būt nākotnē.',
+    'flash_date_order_invalid'     => 'Beigu datumam jābūt pēc sākuma datuma.',
     'flash_username_email_taken'   => 'Lietotājvārds vai e-pasts jau ir aizņemts.',
     'flash_register_success'       => 'Reģistrācija veiksmīga.',
     'flash_invalid_credentials'    => 'Nepareizs e-pasts vai parole.',
