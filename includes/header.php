@@ -1,6 +1,10 @@
 <?php
 require_once __DIR__ . '/../config/db.php';
 $current_lang = $_SESSION['lang'] ?? 'en';
+
+// Build correct language URL
+$newParams = array_merge($_GET, ['lang' => $current_lang === 'en' ? 'lv' : 'en']);
+$languageUrl = '?' . http_build_query($newParams);
 ?>
 
 <!DOCTYPE html>
@@ -114,14 +118,14 @@ $current_lang = $_SESSION['lang'] ?? 'en';
                 <?php if (isLoggedIn()): ?>
                     <div class="flex justify-between items-center mb-4">
                         <p class="font-mono font-bold text-sm uppercase"><?= __('nav_user') ?>: <span class="uppercase text-custom-red"><?= htmlspecialchars($_SESSION['username']) ?></span></p>
-                        <a href="?lang=<?= $current_lang === 'lv' ? 'en' : 'lv' ?>" class="custom-btn !px-2 !py-1">
+                        <a href="<?= $languageUrl ?>" class="custom-btn !px-2 !py-1">
                             <?= $current_lang === 'lv' ? 'EN' : 'LV' ?>
                         </a>
                     </div>
                     <a href="../actions/logout.php" class="w-full custom-btn bg-black !text-white hover:!bg-custom-red"><?= __('nav_logout') ?></a>
                 <?php else: ?>
                     <div class="flex justify-end">
-                        <a href="?lang=<?= $current_lang === 'lv' ? 'en' : 'lv' ?>" class="custom-btn !px-2 !py-1">
+                        <a href="<?= $languageUrl ?>" class="custom-btn !px-2 !py-1">
                             <?= $current_lang === 'lv' ? 'EN' : 'LV' ?>
                         </a>
                     </div>
