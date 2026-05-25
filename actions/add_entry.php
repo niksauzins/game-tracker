@@ -21,12 +21,12 @@ try {
     $stmt->execute();
 
     // Go to all entries
-    setFlash('success', 'Game added to entries');
+    setFlash('success', __('flash_entry_added'));
     header('Location: ../pages/entries.php');
     exit;
 } catch (mysqli_sql_exception $e) {
     error_log($e->getMessage());
-    setFlash('error', 'Could not save changes. Please try again.');
+    setFlash('error', __('flash_db_error'));
     header('Location: ../pages/entries.php');
     exit;
 }

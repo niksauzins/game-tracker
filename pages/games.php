@@ -3,7 +3,7 @@ session_start();
 require_once '../config/db.php';
 requireLogin();
 
-$pageTitle = 'Game Library';
+$pageTitle = __('lib_title') . ' | ' . __('app_title');
 
 $search = trim($_GET['search'] ?? '');
 
@@ -38,18 +38,18 @@ $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
     <div class="custom-card flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-6 mb-8">
         <div>
-            <h1 class="text-3xl lg:text-4xl font-grotesk font-black uppercase leading-none">Global Library</h1>
-            <p class="text-sm font-bold font-mono uppercase mt-2">All games</p>
+            <h1 class="text-3xl lg:text-4xl font-grotesk font-black uppercase leading-none"><?= __('lib_title') ?></h1>
+            <p class="text-sm font-bold font-mono uppercase mt-2"><?= __('lib_subtitle') ?></p>
         </div>
 
         <div class="flex w-full md:w-auto gap-4 flex-col sm:flex-row">
             <form action="games.php" method="GET" class="flex gap-2 w-full sm:w-auto">
-                <input type="text" name="search" value="<?= $search ?>" placeholder="Search titles..." class="custom-input py-2 flex-1 w-full min-w-0">
-                <button type="submit" class="custom-btn bg-custom-yellow text-xs lg:text-sm shrink-0">Search</button>
+                <input type="text" name="search" value="<?= $search ?>" placeholder="<?= __('lib_search_placeholder') ?>" class="custom-input py-2 flex-1 w-full min-w-0">
+                <button type="submit" class="custom-btn bg-custom-yellow text-xs lg:text-sm shrink-0"><?= __('lib_search') ?></button>
             </form>
 
             <button id="openModalBtn" class="custom-btn bg-custom-red text-sm shrink-0">
-                + Add Game
+                <?= __('lib_add_game_btn') ?>
             </button>
         </div>
     </div>
@@ -58,8 +58,8 @@ $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
         <!-- Display message when no games found -->
         <?php if (empty($games)): ?>
             <div class="col-span-full custom-card !bg-custom-yellow text-center py-12">
-                <p class="font-mono font-bold text-2xl uppercase mb-4">No games found.</p>
-                <a href="games.php" class="custom-btn text-sm bg-white">Clear search</a>
+                <p class="font-mono font-bold text-2xl uppercase mb-4"><?= __('lib_no_games_found') ?></p>
+                <a href="games.php" class="custom-btn text-sm bg-white"><?= __('lib_clear_search') ?></a>
             </div>
         <?php endif; ?>
 
@@ -76,39 +76,39 @@ $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 <!-- Modal with a form to add a new game -->
 <div id="gameModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center transition-opacity z-50 p-4">
     <div class="custom-card max-w-lg w-full bg-white">
-        <h2 class="font-grotesk text-3xl font-black uppercase border-b-4 border-black pb-2 mb-6">Add new game</h2>
+        <h2 class="font-grotesk text-3xl font-black uppercase border-b-4 border-black pb-2 mb-6"><?= __('modal_add_game_title') ?></h2>
 
         <form action="../actions/add_game.php" method="POST" class="flex flex-col gap-4">
             <div class="flex flex-col gap-1">
-                <label for="title" class="uppercase font-mono text-sm font-bold">Title</label>
+                <label for="title" class="uppercase font-mono text-sm font-bold"><?= __('field_title') ?></label>
                 <input type="text" name="title" id="title" required class="custom-input">
             </div>
 
             <div class="grid grid-cols-2 gap-4">
                 <div class="flex flex-col gap-1">
-                    <label for="genre" class="uppercase font-mono text-sm font-bold">Genre</label>
-                    <input type="text" name="genre" id="genre" required placeholder="e.g. RPG, Action" class="custom-input">
+                    <label for="genre" class="uppercase font-mono text-sm font-bold"><?= __('field_genre') ?></label>
+                    <input type="text" name="genre" id="genre" required placeholder="<?= __('field_genre_placeholder') ?>" class="custom-input">
                 </div>
 
                 <div class="flex flex-col gap-1">
-                    <label for="release_year" class="uppercase font-mono text-sm font-bold">Year</label>
+                    <label for="release_year" class="uppercase font-mono text-sm font-bold"><?= __('field_year') ?></label>
                     <input type="number" name="release_year" id="release_year" required min="1950" max="2050" class="custom-input">
                 </div>
             </div>
 
             <div class="flex flex-col gap-1">
-                <label for="image_url" class="uppercase font-mono text-sm font-bold">Cover Image URL</label>
+                <label for="image_url" class="uppercase font-mono text-sm font-bold"><?= __('field_cover_url') ?></label>
                 <input type="text" name="image_url" id="image_url" required placeholder="https://..." class="custom-input">
             </div>
 
             <div class="flex flex-col gap-1 mb-4">
-                <label for="description" class="uppercase font-mono text-sm font-bold">Description</label>
+                <label for="description" class="uppercase font-mono text-sm font-bold"><?= __('field_description') ?></label>
                 <textarea type="text" name="description" id="description" required rows="3" class="custom-input"></textarea>
             </div>
 
             <div class="flex justify-end gap-4 border-t-4 border-black pt-6">
-                <button type="button" id="cancelModalBtn" class="custom-btn bg-white">Cancel</button>
-                <button type="submit" class="custom-btn !bg-custom-teal text-lg">Save Game</button>
+                <button type="button" id="cancelModalBtn" class="custom-btn bg-white"><?= __('cancel') ?></button>
+                <button type="submit" class="custom-btn !bg-custom-teal text-lg"><?= __('btn_save_game') ?></button>
             </div>
         </form>
     </div>

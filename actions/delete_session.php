@@ -24,12 +24,12 @@ try {
     $stmt->execute();
 
     // Send back if successfull
-    setFlash('success', 'Session deleted');
+    setFlash('success', __('flash_session_deleted'));
     header("Location: ../pages/entry_detail.php?id={$entry_id}");
     exit;
 } catch (mysqli_sql_exception $e) {
     error_log($e->getMessage());
-    setFlash('error', 'Failed to delete session. Please try again.');
+    setFlash('error', __('flash_session_delete_failed'));
     header("Location: ../pages/entry_detail.php?id={$entry_id}");
     exit;
 }

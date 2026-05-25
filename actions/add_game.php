@@ -17,7 +17,7 @@ $description = trim($_POST['description'] ?? '');
 
 // Check if all fields are filled
 if (empty($title) || empty($genre) || empty($release_year) || empty($image_url) || empty($description)) {
-    setFlash('error', 'All fields required');
+    setFlash('error', __('flash_all_fields_required'));
     header('Location: ../pages/games.php');
     exit;
 }
@@ -29,13 +29,13 @@ try {
     $stmt->execute();
 
     // Send back if successfull
-    setFlash('success', 'Game created');
+    setFlash('success', __('flash_game_created'));
     header('Location: ../pages/games.php');
     exit;
 } catch (mysqli_sql_exception $e) {
     // Log and send back with error if failed
     error_log($e->getMessage());
-    setFlash('error', 'Could not save changes. Please try again.');
+    setFlash('error', __('flash_db_error'));
     header('Location: ../pages/games.php');
     exit;
 }

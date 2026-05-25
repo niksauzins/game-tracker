@@ -6,7 +6,7 @@ $genre = htmlspecialchars($cardData['genre']);
 $release_year = htmlspecialchars($cardData['release_year']);
 $image_url = htmlspecialchars($cardData['image_url']);
 
-$status = htmlspecialchars($cardData['status'] ?? 'Unknown');
+$status = htmlspecialchars(translateStatus($cardData['status'] ?? ''));
 $isEntry = $cardData['is_entry'] ?? false;
 $entryId = $cardData['entry_id'] ?? null;
 $isAlreadyAdded = !empty($entryId);
@@ -41,9 +41,9 @@ $link = $isEntry ? "entry_detail.php?id={$entryId}" : "game_detail.php?id={$id}"
     <?php if (!$isAlreadyAdded): ?>
         <form action="../actions/add_entry.php" method="POST" class="relative z-30 mt-auto pt-2">
             <input type="hidden" name="game_id" value="<?= $id ?>">
-            <button type="submit" class="custom-btn !bg-custom-teal w-full text-sm">Add to entries</button>
+            <button type="submit" class="custom-btn !bg-custom-teal w-full text-sm"><?= __('card_add_to_entries') ?></button>
         </form>
     <?php else: ?>
-        <p class="border-t-2 border-black border-dashed pt-5 font-mono uppercase font-bold text-sm pb-1">Status: <span class="bg-custom-teal px-2 py-1 border-2 border-black"><?= $status ?></span></p>
+        <p class="border-t-2 border-black border-dashed pt-5 font-mono uppercase font-bold text-sm pb-1"><?= __('status') ?>: <span class="bg-custom-teal px-2 py-1 border-2 border-black"><?= $status ?></span></p>
     <?php endif; ?>
 </div>

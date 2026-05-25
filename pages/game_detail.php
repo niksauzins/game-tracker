@@ -14,19 +14,19 @@ $game = $stmt->get_result()->fetch_assoc();
 
 // If no game found, go back
 if (!$game) {
-    setFlash('error', 'Game not found');
+    setFlash('error', __('flash_game_not_found'));
     header('Location: games.php');
     exit;
 }
 
-$pageTitle = $game['title'];
+$pageTitle = $game['title'] . ' | ' . __('app_title');
 ?>
 
 <?php require_once '../includes/header.php' ?>
 
 <main class="flex-1 p-6 lg:p-12 flex flex-col items-center">
     <div class="w-full max-w-4xl mb-6">
-        <a href="games.php" class="custom-btn bg-white text-sm"><i class="fa-solid fa-arrow-left mr-2"></i> Back to Library</a>
+        <a href="games.php" class="custom-btn bg-white text-sm"><i class="fa-solid fa-arrow-left mr-2"></i> <?= __('back_to_library') ?></a>
     </div>
 
     <?php renderFlash('max-w-4xl w-full') ?>
@@ -43,10 +43,10 @@ $pageTitle = $game['title'];
                 <!-- Show edit button only for admins -->
                 <div class="flex gap-3 absolute top-2 md:top-4 right-2 md:right-4">
                     <button id="showEditModalBtn" class="custom-btn !bg-custom-yellow text-xs md:text-sm">
-                        Edit
+                        <?= __('edit') ?>
                     </button>
                     <button id="showDeleteModalBtn" class="custom-btn !bg-custom-red text-xs md:text-sm">
-                        Delete
+                        <?= __('delete') ?>
                     </button>
                 </div>
             <?php endif; ?>
@@ -72,41 +72,41 @@ $pageTitle = $game['title'];
     <!-- Modal to edit game info, only for admins -->
     <div id="editModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center transition-opacity z-50 p-4">
         <div class="custom-card max-w-lg w-full bg-white">
-            <h2 class="font-grotesk text-3xl font-black uppercase border-b-4 border-black pb-2 mb-6">Edit game</h2>
+            <h2 class="font-grotesk text-3xl font-black uppercase border-b-4 border-black pb-2 mb-6"><?= __('modal_edit_game_title') ?></h2>
 
             <form action="../actions/edit_game.php" method="POST" class="flex flex-col gap-4">
                 <input type="hidden" name="game_id" id="game_id" value="<?= htmlspecialchars($game['id']) ?>">
 
                 <div class="flex flex-col gap-1">
-                    <label for="title" class="uppercase font-mono text-sm font-bold">Title</label>
+                    <label for="title" class="uppercase font-mono text-sm font-bold"><?= __('field_title') ?></label>
                     <input type="text" name="title" id="title" value="<?= htmlspecialchars($game['title']) ?>" required class="custom-input">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div class="flex flex-col gap-1">
-                        <label for="genre" class="uppercase font-mono text-sm font-bold">Genre</label>
-                        <input type="text" name="genre" id="genre" value="<?= htmlspecialchars($game['genre']) ?>" required placeholder="e.g. RPG, Action" class="custom-input">
+                        <label for="genre" class="uppercase font-mono text-sm font-bold"><?= __('field_genre') ?></label>
+                        <input type="text" name="genre" id="genre" value="<?= htmlspecialchars($game['genre']) ?>" required class="custom-input">
                     </div>
 
                     <div class="flex flex-col gap-1">
-                        <label for="release_year" class="uppercase font-mono text-sm font-bold">Year</label>
+                        <label for="release_year" class="uppercase font-mono text-sm font-bold"><?= __('field_year') ?></label>
                         <input type="number" name="release_year" id="release_year" value="<?= htmlspecialchars($game['release_year']) ?>" required min="1950" max="2050" class="custom-input">
                     </div>
                 </div>
 
                 <div class="flex flex-col gap-1">
-                    <label for="image_url" class="uppercase font-mono text-sm font-bold">Cover Image URL</label>
+                    <label for="image_url" class="uppercase font-mono text-sm font-bold"><?= __('field_cover_url') ?></label>
                     <input type="text" name="image_url" id="image_url" value="<?= htmlspecialchars($game['image_url']) ?>" required placeholder="https://..." class="custom-input">
                 </div>
 
                 <div class="flex flex-col gap-1 mb-4">
-                    <label for="description" class="uppercase font-mono text-sm font-bold">Description</label>
+                    <label for="description" class="uppercase font-mono text-sm font-bold"><?= __('field_description') ?></label>
                     <textarea type="text" name="description" id="description" required rows="3" class="custom-input"><?= htmlspecialchars($game['description']) ?></textarea>
                 </div>
 
                 <div class="flex justify-end gap-4 border-t-4 border-black pt-6">
-                    <button type="button" id="cancelEditModalBtn" class="custom-btn bg-white">Cancel</button>
-                    <button type="submit" class="custom-btn !bg-custom-yellow text-lg">Save Changes</button>
+                    <button type="button" id="cancelEditModalBtn" class="custom-btn bg-white"><?= __('cancel') ?></button>
+                    <button type="submit" class="custom-btn !bg-custom-yellow text-lg"><?= __('save_changes') ?></button>
                 </div>
             </form>
         </div>
@@ -115,16 +115,16 @@ $pageTitle = $game['title'];
     <!-- Modal to confirm game deletion, only for admins -->
     <div id="deleteModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center transition-opacity z-50 p-4">
         <div class="custom-card max-w-md w-full bg-white">
-            <h2 class="font-grotesk text-3xl font-black uppercase border-b-4 border-black pb-2 mb-4 text-center text-custom-red">Warning</h2>
+            <h2 class="font-grotesk text-3xl font-black uppercase border-b-4 border-black pb-2 mb-4 text-center text-custom-red"><?= __('modal_delete_title') ?></h2>
 
-            <p class="font-mono font-bold uppercase mb-4 text-lg text-center">Delete <span class="text-white bg-black px-2 py-1"><?= htmlspecialchars($game['title']) ?></span> from the database?</p>
+            <p class="font-mono font-bold uppercase mb-4 text-lg text-center"><?= __('delete') ?> <span class="text-white bg-black px-2 py-1"><?= htmlspecialchars($game['title']) ?></span> <?= __('modal_delete_prompt') ?></p>
 
             <form action="../actions/delete_game.php" method="POST" class="mt-8 mb-4">
                 <input type="hidden" name="game_id" id="game_id" value="<?= htmlspecialchars($game['id']) ?>">
 
                 <div class="flex justify-end gap-4 justify-center">
-                    <button type="button" id="cancelDeleteModalBtn" class="custom-btn bg-white">Cancel</button>
-                    <button type="submit" class="custom-btn !bg-custom-red">Confirm delete</button>
+                    <button type="button" id="cancelDeleteModalBtn" class="custom-btn bg-white"><?= __('cancel') ?></button>
+                    <button type="submit" class="custom-btn !bg-custom-red"><?= __('btn_confirm_delete') ?></button>
                 </div>
             </form>
         </div>

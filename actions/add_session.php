@@ -19,7 +19,7 @@ if ($notes === '') {
 
 // Validate
 if ($entry_id <= 0 || empty($played_at) || $duration_minutes <= 0) {
-    setFlash('error', 'Invalid session inputs');
+    setFlash('error', __('flash_invalid_session_inputs'));
     header("Location: ../pages/entry_detail.php?id={$entry_id}");
     exit;
 }
@@ -29,7 +29,7 @@ $stmt = $conn->prepare('SELECT id FROM game_entries WHERE id = ? AND user_id = ?
 $stmt->bind_param('ii', $entry_id, $_SESSION['user_id']);
 $stmt->execute();
 if (!$stmt->get_result()->fetch_assoc()) {
-    setFlash('error', 'Unauthorized');
+    setFlash('error', __('flash_unauthorized'));
     header('Location: ../pages/entries.php');
     exit;
 }
@@ -40,12 +40,12 @@ try {
     $stmt->bind_param('isis', $entry_id, $played_at, $duration_minutes, $notes);
     $stmt->execute();
 
-    setFlash('success', 'Session added');
+    setFlash('success', __('flash_session_added'));
     header("Location: ../pages/entry_detail.php?id={$entry_id}");
     exit;
 } catch (mysqli_sql_exception $e) {
     error_log($e->getMessage());
-    setFlash('error', 'Could not save changes. Please try again.');
+    setFlash('error', __('flash_db_error'));
     header("Location: ../pages/entry_detail.php?id={$entry_id}");
     exit;
 }

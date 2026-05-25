@@ -4,19 +4,19 @@
     <div class="max-w-4xl w-full custom-card flex flex-col md:flex-row p-0 overflow-hidden">
         <div class="bg-custom-yellow w-full md:w-1/2 p-6 md:p-8 flex items-center border-b-4 md:border-b-0 md:border-r-4 border-black">
             <h1 class="font-grotesk font-black text-4xl sm:text-5xl md:text-7xl uppercase tracking-tight leading-none text-left">
-                Game <br class="hidden md:inline"> Tracker
+                <?= __('index_title_1') ?> <br class="hidden md:inline"> <?= __('index_title_2') ?>
             </h1>
         </div>
         <div class="w-full md:w-1/2 p-6 sm:p-8 md:p-12 flex flex-col justify-center gap-4">
             <p class="mb-2 md:mb-4 font-mono leading-relaxed uppercase font-bold border-l-4 border-custom-red pl-4 text-sm sm:text-base md:text-lg">
-                Do you forget what games you want to play?
+                <?= __('index_question') ?>
                 <br><br>
                 <span class="text-gray-600 normal-case font-normal text-xs sm:text-sm md:text-base">
-                    This tool will help you track your game progress and keep you on track.
+                    <?= __('index_answer') ?>
                 </span>
             </p>
-            <a href="pages/register.php" class="custom-btn bg-custom-teal text-sm md:text-lg w-full">Get Started</a>
-            <a href="pages/login.php" class="custom-btn text-sm md:text-lg w-full">Login</a>
+            <a href="pages/register.php" class="custom-btn bg-custom-teal text-sm md:text-lg w-full"><?= __('index_get_started') ?></a>
+            <a href="pages/login.php" class="custom-btn text-sm md:text-lg w-full"><?= __('nav_login') ?></a>
         </div>
 
     </div>

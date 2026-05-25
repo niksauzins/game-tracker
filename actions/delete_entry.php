@@ -18,12 +18,12 @@ try {
     $stmt->execute();
 
     // Send back if successfull
-    setFlash('success', 'Entry removed');
+    setFlash('success', __('flash_entry_removed'));
     header("Location: ../pages/entries.php");
     exit;
 } catch (mysqli_sql_exception $e) {
     error_log($e->getMessage());
-    setFlash('error', 'Failed to remove entry. Please try again.');
+    setFlash('error', __('flash_remove_failed'));
     header("Location: ../pages/entries.php");
     exit;
 }

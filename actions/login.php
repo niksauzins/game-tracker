@@ -13,7 +13,7 @@ $password = $_POST['password'];
 
 // All fields are required
 if (empty($email) || empty($password)) {
-    setFlash('error', 'All fields required');
+    setFlash('error', __('flash_all_fields_required'));
     header('Location: ../pages/login.php');
     exit;
 }
@@ -26,7 +26,7 @@ $user = $stmt->get_result()->fetch_assoc();
 
 // If user with that email doesn't exist or the password doesn't match show an error
 if (!$user || !password_verify($password, $user['password'])) {
-    setFlash('error', 'Invalid email or password');
+    setFlash('error', __('flash_invalid_credentials'));
     header('Location: ../pages/login.php');
     exit;
 }
@@ -36,6 +36,6 @@ $_SESSION['user_id'] = $user['id'];
 $_SESSION['username'] = $user['username'];
 $_SESSION['role'] = $user['role'];
 
-setFlash('success', 'Login successful');
+setFlash('success', __('flash_login_success'));
 header('Location: ../pages/dashboard.php');
 exit;

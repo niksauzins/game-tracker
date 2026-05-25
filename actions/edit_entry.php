@@ -19,7 +19,7 @@ $notes = trim($_POST['notes'] ?? '');
 // Validate data
 $allowed_statuses = ['waitlist', 'playing', 'finished', 'quit'];
 if (!in_array($status, $allowed_statuses)) {
-    setFlash('error', 'Invalid status');
+    setFlash('error', __('flash_invalid_status'));
     header("Location: ../pages/entry_detail.php?id={$entry_id}");
     exit;
 }
@@ -34,12 +34,12 @@ try {
     $stmt->bind_param('sisssii', $status, $rating, $started_at, $finished_at, $notes, $entry_id, $_SESSION['user_id']);
     $stmt->execute();
 
-    setFlash('success', 'Entry info updated');
+    setFlash('success', __('flash_entry_updated'));
     header("Location: ../pages/entry_detail.php?id={$entry_id}");
     exit;
 } catch (mysqli_sql_exception $e) {
     error_log($e->getMessage());
-    setFlash('error', 'Could not save changes. Please try again.');
+    setFlash('error', __('flash_db_error'));
     header("Location: ../pages/entry_detail.php?id={$entry_id}");
     exit;
 }

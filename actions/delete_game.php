@@ -18,12 +18,12 @@ try {
     $stmt->execute();
 
     // Send back if successfull
-    setFlash('success', 'Game deleted');
+    setFlash('success', __('flash_game_deleted'));
     header("Location: ../pages/games.php");
     exit;
 } catch (mysqli_sql_exception $e) {
     error_log($e->getMessage());
-    setFlash('error', 'Failed to delete game. Please try again.');
+    setFlash('error', __('flash_delete_failed'));
     header("Location: ../pages/games.php");
     exit;
 }

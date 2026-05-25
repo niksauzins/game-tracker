@@ -1,14 +1,15 @@
 <?php
 require_once __DIR__ . '/../config/db.php';
+$current_lang = $_SESSION['lang'] ?? 'en';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= $current_lang ?>">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $pageTitle ?? 'GameTracker' ?></title>
+    <title><?= $pageTitle ?? __('app_title') ?></title>
 
     <!-- Custom Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -83,7 +84,7 @@ require_once __DIR__ . '/../config/db.php';
 
         <!-- Mobile navbar -->
         <div class="flex items-center justify-between p-4 md:hidden">
-            <h1 class="text-3xl font-black font-grotesk tracking-tight">GAME TRACKER</h1>
+            <h1 class="text-3xl font-black font-grotesk tracking-tight uppercase"><?= __('app_title') ?></h1>
             <button id="mobileMenuBtn" class="custom-btn !px-3 !py-1.5 bg-white text-sm">
                 <i class="fa-solid fa-bars"></i>
             </button>
@@ -92,29 +93,40 @@ require_once __DIR__ . '/../config/db.php';
         <!-- Desktop navbar -->
         <div id="navMenuContent" class="hidden md:flex flex-col flex-1">
             <div class="flex-1 p-6 md:p-8 pt-2 md:pt-8">
-                <h1 class="hidden md:block text-4xl font-semibold font-grotesk border-b-4 border-black pb-3">GAME TRACKER</h1>
+                <h1 class="hidden md:block text-4xl font-semibold font-grotesk border-b-4 border-black pb-3 uppercase"><?= __('app_title') ?></h1>
 
                 <nav class="flex flex-col justify-between mt-0 md:mt-8 text-lg">
                     <div class="flex flex-col gap-5 md:gap-6 font-bold font-mono">
                         <?php if (isLoggedIn()): ?>
-                            <a href="/pages/dashboard.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-house"></i> Dashboard</a>
-                            <a href="/pages/games.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-gamepad"></i> Library</a>
-                            <a href="/pages/entries.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-layer-group"></i> My Entries</a>
+                            <a href="/pages/dashboard.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-house"></i> <?= __('nav_dashboard') ?></a>
+                            <a href="/pages/games.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-gamepad"></i> <?= __('nav_library') ?></a>
+                            <a href="/pages/entries.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-layer-group"></i> <?= __('nav_my_entries') ?></a>
                         <?php else: ?>
-                            <a href="/" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-house"></i> Home</a>
-                            <a href="/pages/login.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-arrow-right-to-bracket"></i> Login</a>
-                            <a href="/pages/register.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-user-plus"></i> Register</a>
+                            <a href="/" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-house"></i> <?= __('nav_home') ?></a>
+                            <a href="/pages/login.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-arrow-right-to-bracket"></i> <?= __('nav_login') ?></a>
+                            <a href="/pages/register.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-user-plus"></i> <?= __('nav_register') ?></a>
                         <?php endif; ?>
                     </div>
                 </nav>
             </div>
 
-            <?php if (isLoggedIn()): ?>
-                <div class="border-t-4 border-black bg-white p-6 md:p-8">
-                    <p class="mb-4 font-mono font-bold text-sm">USER: <span class="uppercase text-custom-red"><?= htmlspecialchars($_SESSION['username']) ?></span></p>
-                    <a href="../actions/logout.php" class="w-full custom-btn bg-black !text-white hover:!bg-custom-red">Logout</a>
-                </div>
-            <?php endif; ?>
+            <div class="border-t-4 border-black bg-white p-6 md:px-8 md:py-5">
+                <?php if (isLoggedIn()): ?>
+                    <div class="flex justify-between items-center mb-4">
+                        <p class="font-mono font-bold text-sm uppercase"><?= __('nav_user') ?>: <span class="uppercase text-custom-red"><?= htmlspecialchars($_SESSION['username']) ?></span></p>
+                        <a href="?lang=<?= $current_lang === 'lv' ? 'en' : 'lv' ?>" class="custom-btn !px-2 !py-1">
+                            <?= $current_lang === 'lv' ? 'EN' : 'LV' ?>
+                        </a>
+                    </div>
+                    <a href="../actions/logout.php" class="w-full custom-btn bg-black !text-white hover:!bg-custom-red"><?= __('nav_logout') ?></a>
+                <?php else: ?>
+                    <div class="flex justify-end">
+                        <a href="?lang=<?= $current_lang === 'lv' ? 'en' : 'lv' ?>" class="custom-btn !px-2 !py-1">
+                            <?= $current_lang === 'lv' ? 'EN' : 'LV' ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
     </aside>
 

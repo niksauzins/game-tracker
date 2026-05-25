@@ -14,7 +14,7 @@ $password = $_POST['password'];
 
 // All fields are required
 if (empty($username) || empty($email) || empty($password)) {
-    setFlash('error', 'All fields required');
+    setFlash('error', __('flash_all_fields_required'));
     header('Location: ../pages/register.php');
     exit;
 }
@@ -25,7 +25,7 @@ $stmt->bind_param('ss', $username, $email);
 $stmt->execute();
 $result = $stmt->get_result();
 if ($result->fetch_assoc()) {
-    setFlash('error', 'Username or email already taken');
+    setFlash('error', __('flash_username_email_taken'));
     header('Location: ../pages/register.php');
     exit;
 }
@@ -44,6 +44,6 @@ $_SESSION['username'] = $username;
 $_SESSION['role'] = 'user';
 
 // Redirect to dashboard
-setFlash('success', 'Registered successfully');
+setFlash('success', __('flash_register_success'));
 header('Location: ../pages/dashboard.php');
 exit;

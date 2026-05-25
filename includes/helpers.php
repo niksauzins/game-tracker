@@ -67,3 +67,43 @@ function renderFlash(string $classes = ''): void
             </button>
         </div>";
 }
+
+// ----- Handle translations -----
+
+// Set the language
+if (isset($_GET['lang'])) {
+    $selected_lang = trim($_GET['lang']);
+    if (in_array($selected_lang, ['en', 'lv'])) {
+        $_SESSION['lang'] = $selected_lang;
+    }
+}
+
+// Get language from session
+$current_lang = $_SESSION['lang'] ?? 'en';
+
+// Load the correct language file
+$translation = [];
+$lang_file_location = __DIR__ . "/../lang/{$current_lang}.php";
+if (file_exists($lang_file_location)) {
+    $translation = require $lang_file_location;
+}
+
+// Load correct translation
+function __(string $key): string
+{
+    global $translation;
+    return $translation[$key] ?? $key;
+}
+
+// Translate database status strings
+function translateStatus(string $status): string
+{
+    $map = [
+        'waitlist' => __('status_waitlist'),
+        'playing' => __('status_playing'),
+        'finished' => __('status_finished'),
+        'quit' => __('status_quit'),
+    ];
+
+    return $map[$status] ?? $status;
+}
