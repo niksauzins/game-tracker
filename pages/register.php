@@ -8,6 +8,9 @@ if (isLoggedIn()) {
 }
 
 $pageTitle = __('nav_register') . ' | ' . __('app_title');
+
+$old = $_SESSION['old'] ?? [];
+unset($_SESSION['old']);
 ?>
 
 <?php require_once '../includes/header.php' ?>
@@ -19,12 +22,12 @@ $pageTitle = __('nav_register') . ' | ' . __('app_title');
         <form action="../actions/register.php" method="POST" class="flex flex-col gap-5">
             <div class="flex flex-col gap-2">
                 <label class="uppercase font-mono font-bold text-sm"><?= __('username') ?></label>
-                <input type="text" name="username" placeholder="<?= __('choose_name') ?>" required class="custom-input">
+                <input type="text" name="username" value="<?= htmlspecialchars($old['username'] ?? '') ?>" placeholder="<?= __('choose_name') ?>" required class="custom-input">
             </div>
 
             <div class="flex flex-col gap-2">
                 <label class="uppercase font-mono font-bold text-sm"><?= __('email') ?></label>
-                <input type="email" name="email" placeholder="<?= __('email_placeholder') ?>" required class="custom-input">
+                <input type="email" name="email" value="<?= htmlspecialchars($old['email'] ?? '') ?>" placeholder="<?= __('email_placeholder') ?>" required class="custom-input">
             </div>
 
             <div class="flex flex-col gap-2">

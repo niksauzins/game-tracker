@@ -15,6 +15,8 @@ $release_year = intval($_POST['release_year'] ?? 0);
 $image_url = trim($_POST['image_url'] ?? '');
 $description = trim($_POST['description'] ?? '');
 
+$_SESSION['old'] = $_POST;
+
 // Check if all fields are filled
 if (empty($title) || empty($genre) || empty($release_year) || empty($image_url) || empty($description)) {
     setFlash('error', __('flash_all_fields_required'));
@@ -36,12 +38,15 @@ if ($release_year < 1950 || $release_year > 2050) {
     exit;
 }
 
+
 try {
     // Try to insert into database
     $stmt = $conn->prepare('INSERT INTO games (title, description, genre, release_year, image_url) VALUES (?, ?, ?, ?, ?)');
     $stmt->bind_param('sssis', $title, $description, $genre, $release_year, $image_url);
     $stmt->execute();
-
+    
+    unset($_SESSION['old']);
+    
     // Send back if successfull
     setFlash('success', __('flash_game_created'));
     header('Location: ../pages/games.php');

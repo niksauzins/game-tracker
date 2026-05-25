@@ -16,6 +16,9 @@ $started_at = !empty($_POST['started_at']) ? $_POST['started_at'] : null;
 $finished_at = !empty($_POST['finished_at']) ? $_POST['finished_at'] : null;
 $notes = trim($_POST['notes'] ?? '');
 
+$_SESSION['old'] = $_POST;
+$_SESSION['open_modal'] = 'edit_entry';
+
 // Validate data
 $allowed_statuses = ['waitlist', 'playing', 'finished', 'quit'];
 if (!in_array($status, $allowed_statuses)) {
@@ -31,6 +34,7 @@ if ($started_at && $finished_at && $started_at > $finished_at) {
     exit;
 }
 
+
 try {
     // Update database values
     $stmt = $conn->prepare('
@@ -40,7 +44,9 @@ try {
     ');
     $stmt->bind_param('sisssii', $status, $rating, $started_at, $finished_at, $notes, $entry_id, $_SESSION['user_id']);
     $stmt->execute();
-
+    
+    unset($_SESSION['old'], $_SESSION['open_modal']);
+    
     setFlash('success', __('flash_entry_updated'));
     header("Location: ../pages/entry_detail.php?id={$entry_id}");
     exit;

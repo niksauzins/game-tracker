@@ -17,6 +17,9 @@ if ($notes === '') {
     $notes = null;
 }
 
+$_SESSION['old'] = $_POST;
+$_SESSION['open_modal'] = 'add_session';
+
 // Validate
 if ($entry_id <= 0 || empty($played_at) || $duration_minutes <= 0) {
     setFlash('error', __('flash_invalid_session_inputs'));
@@ -30,6 +33,7 @@ if (!empty($played_at) && $played_at > date('Y-m-d')) {
     header("Location: ../pages/entry_detail.php?id={$entry_id}");
     exit;
 }
+
 
 // Make sure the entry belongs to the correct user
 $stmt = $conn->prepare('SELECT id FROM game_entries WHERE id = ? AND user_id = ?');
@@ -46,6 +50,8 @@ try {
     $stmt = $conn->prepare('INSERT INTO sessions (entry_id, played_at, duration_minutes, notes) VALUES (?, ?, ?, ?)');
     $stmt->bind_param('isis', $entry_id, $played_at, $duration_minutes, $notes);
     $stmt->execute();
+
+    unset($_SESSION['old'], $_SESSION['open_modal']);
 
     setFlash('success', __('flash_session_added'));
     header("Location: ../pages/entry_detail.php?id={$entry_id}");

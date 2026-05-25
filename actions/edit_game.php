@@ -16,6 +16,8 @@ $release_year = intval($_POST['release_year'] ?? 0);
 $image_url = trim($_POST['image_url'] ?? '');
 $description = trim($_POST['description'] ?? '');
 
+$_SESSION['old'] = $_POST;
+
 // Check if all fields are filled
 if (empty($title) || empty($genre) || empty($release_year) || empty($image_url) || empty($description)) {
     setFlash('error', __('flash_all_fields_required'));
@@ -37,11 +39,14 @@ if ($release_year < 1950 || $release_year > 2050) {
     exit;
 }
 
+
 try {
     // Update database with new values
     $stmt = $conn->prepare('UPDATE games SET title = ?, description = ?, genre = ?, release_year = ?, image_url = ? WHERE id = ?');
     $stmt->bind_param('sssisi', $title, $description, $genre, $release_year, $image_url, $game_id);
     $stmt->execute();
+
+    unset($_SESSION['old']);
 
     // Send back if successfull
     setFlash('success', __('flash_game_updated'));

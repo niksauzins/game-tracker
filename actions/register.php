@@ -8,9 +8,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$username = trim($_POST['username']) ?? '';
+$username = trim($_POST['username'] ?? '');
 $email = trim($_POST['email'] ?? '');
 $password = $_POST['password'] ?? '';
+
+// Set old values and unset password
+$_SESSION['old'] = $_POST;
+unset($_SESSION['old']['password']);
 
 // All fields are required
 if (empty($username) || empty($email) || empty($password)) {
@@ -40,6 +44,7 @@ if (strlen($password) < 8) {
     exit;
 }
 
+
 // Check if username or email are taken
 $stmt = $conn->prepare('SELECT id FROM users WHERE username = ? OR email = ?');
 $stmt->bind_param('ss', $username, $email);
@@ -58,6 +63,8 @@ $hash = password_hash($password, PASSWORD_DEFAULT);
 $stmt = $conn->prepare('INSERT INTO users (username, email, password) VALUES (?, ?, ?)');
 $stmt->bind_param('sss', $username, $email, $hash);
 $stmt->execute();
+
+unset($_SESSION['old']);
 
 // Set session variables
 $_SESSION['user_id'] = $conn->insert_id;

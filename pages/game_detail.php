@@ -20,6 +20,10 @@ if (!$game) {
 }
 
 $pageTitle = $game['title'] . ' | ' . __('app_title');
+
+$old = $_SESSION['old'] ?? [];
+unset($_SESSION['old']);
+$openModal = !empty($old);
 ?>
 
 <?php require_once '../includes/header.php' ?>
@@ -29,7 +33,7 @@ $pageTitle = $game['title'] . ' | ' . __('app_title');
         <a href="games.php" class="custom-btn bg-white text-sm"><i class="fa-solid fa-arrow-left mr-2"></i> <?= __('back_to_library') ?></a>
     </div>
 
-    <?php renderFlash('max-w-4xl w-full') ?>
+    <?php if (!$openModal) renderFlash('max-w-4xl w-full') ?>
 
     <div class="max-w-4xl w-full custom-card p-0 flex flex-col bg-white overflow-hidden">
 
@@ -70,7 +74,7 @@ $pageTitle = $game['title'] . ' | ' . __('app_title');
 
 <?php if (isAdmin()): ?>
     <!-- Modal to edit game info, only for admins -->
-    <div id="editModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center transition-opacity z-50 p-4">
+    <div id="editModal" class="<?= $openModal ? '' : 'hidden' ?> fixed inset-0 bg-black/80 flex justify-center items-center transition-opacity z-50 p-4">
         <div class="custom-card max-w-lg w-full bg-white">
             <h2 class="font-grotesk text-3xl font-black uppercase border-b-4 border-black pb-2 mb-6"><?= __('modal_edit_game_title') ?></h2>
 
@@ -79,30 +83,32 @@ $pageTitle = $game['title'] . ' | ' . __('app_title');
 
                 <div class="flex flex-col gap-1">
                     <label for="title" class="uppercase font-mono text-sm font-bold"><?= __('field_title') ?></label>
-                    <input type="text" name="title" id="title" value="<?= htmlspecialchars($game['title']) ?>" required class="custom-input">
+                    <input type="text" name="title" id="title" value="<?= htmlspecialchars($old['title'] ?? $game['title']) ?>" required class="custom-input">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div class="flex flex-col gap-1">
                         <label for="genre" class="uppercase font-mono text-sm font-bold"><?= __('field_genre') ?></label>
-                        <input type="text" name="genre" id="genre" value="<?= htmlspecialchars($game['genre']) ?>" required class="custom-input">
+                        <input type="text" name="genre" id="genre" value="<?= htmlspecialchars($old['genre'] ?? $game['genre']) ?>" required class="custom-input">
                     </div>
 
                     <div class="flex flex-col gap-1">
                         <label for="release_year" class="uppercase font-mono text-sm font-bold"><?= __('field_year') ?></label>
-                        <input type="number" name="release_year" id="release_year" value="<?= htmlspecialchars($game['release_year']) ?>" required min="1950" max="2050" class="custom-input">
+                        <input type="number" name="release_year" id="release_year" value="<?= htmlspecialchars($old['release_year'] ?? $game['release_year']) ?>" required min="1950" max="2050" class="custom-input">
                     </div>
                 </div>
 
                 <div class="flex flex-col gap-1">
                     <label for="image_url" class="uppercase font-mono text-sm font-bold"><?= __('field_cover_url') ?></label>
-                    <input type="text" name="image_url" id="image_url" value="<?= htmlspecialchars($game['image_url']) ?>" required placeholder="https://..." class="custom-input">
+                    <input type="text" name="image_url" id="image_url" value="<?= htmlspecialchars($old['image_url'] ?? $game['image_url']) ?>" required placeholder="https://..." class="custom-input">
                 </div>
 
                 <div class="flex flex-col gap-1 mb-4">
                     <label for="description" class="uppercase font-mono text-sm font-bold"><?= __('field_description') ?></label>
-                    <textarea type="text" name="description" id="description" required rows="3" class="custom-input"><?= htmlspecialchars($game['description']) ?></textarea>
+                    <textarea name="description" id="description" required rows="3" class="custom-input"><?= htmlspecialchars($old['description'] ?? $game['description']) ?></textarea>
                 </div>
+
+                <?php renderFlash('-mt-2') ?>
 
                 <div class="flex justify-end gap-4 border-t-4 border-black pt-6">
                     <button type="button" id="cancelEditModalBtn" class="custom-btn bg-white"><?= __('cancel') ?></button>

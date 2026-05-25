@@ -8,6 +8,9 @@ if (isLoggedIn()) {
 }
 
 $pageTitle = __('nav_login') . ' | ' . __('app_title');
+
+$old = $_SESSION['old'] ?? [];
+unset($_SESSION['old']);
 ?>
 
 <?php require_once '../includes/header.php' ?>
@@ -19,7 +22,7 @@ $pageTitle = __('nav_login') . ' | ' . __('app_title');
         <form action="../actions/login.php" method="POST" class="flex flex-col gap-5">
             <div class="flex flex-col gap-2">
                 <label class="uppercase font-mono font-bold text-sm"><?= __('email') ?></label>
-                <input type="email" name="email" placeholder="<?= __('enter_email') ?>" required class="custom-input">
+                <input type="email" name="email" value="<?= htmlspecialchars($old['email'] ?? '') ?>" placeholder="<?= __('enter_email') ?>" required class="custom-input">
             </div>
             <div class="flex flex-col gap-2">
                 <label class="uppercase font-mono font-bold text-sm"><?= __('password') ?></label>

@@ -11,6 +11,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $email = trim($_POST['email']);
 $password = $_POST['password'];
 
+// Set old values and unset password
+$_SESSION['old'] = $_POST;
+unset($_SESSION['old']['password']);
+
+
 // All fields are required
 if (empty($email) || empty($password)) {
     setFlash('error', __('flash_all_fields_required'));
@@ -30,6 +35,8 @@ if (!$user || !password_verify($password, $user['password'])) {
     header('Location: ../pages/login.php');
     exit;
 }
+
+unset($_SESSION['old']);
 
 // Set session variables
 $_SESSION['user_id'] = $user['id'];

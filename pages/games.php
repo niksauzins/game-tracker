@@ -28,13 +28,17 @@ if ($search) {
 
 $stmt->execute();
 $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+$old = $_SESSION['old'] ?? [];
+unset($_SESSION['old']);
+$openModal = !empty($old);
 ?>
 
 <?php require_once '../includes/header.php' ?>
 
 <main class="flex-1 p-6 lg:p-12">
 
-    <?php renderFlash() ?>
+    <?php if (!$openModal) renderFlash() ?>
 
     <div class="custom-card flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-6 mb-8">
         <div>
@@ -74,37 +78,39 @@ $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 </main>
 
 <!-- Modal with a form to add a new game -->
-<div id="gameModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center transition-opacity z-50 p-4">
+<div id="gameModal" class="<?= $openModal ? '' : 'hidden' ?> fixed inset-0 bg-black/80 flex justify-center items-center transition-opacity z-50 p-4">
     <div class="custom-card max-w-lg w-full bg-white">
         <h2 class="font-grotesk text-3xl font-black uppercase border-b-4 border-black pb-2 mb-6"><?= __('modal_add_game_title') ?></h2>
 
         <form action="../actions/add_game.php" method="POST" class="flex flex-col gap-4">
             <div class="flex flex-col gap-1">
                 <label for="title" class="uppercase font-mono text-sm font-bold"><?= __('field_title') ?></label>
-                <input type="text" name="title" id="title" required class="custom-input">
+                <input type="text" name="title" value="<?= htmlspecialchars($old['title'] ?? '') ?>" id="title" required class="custom-input">
             </div>
 
             <div class="grid grid-cols-2 gap-4">
                 <div class="flex flex-col gap-1">
                     <label for="genre" class="uppercase font-mono text-sm font-bold"><?= __('field_genre') ?></label>
-                    <input type="text" name="genre" id="genre" required placeholder="<?= __('field_genre_placeholder') ?>" class="custom-input">
+                    <input type="text" name="genre" value="<?= htmlspecialchars($old['genre'] ?? '') ?>" id="genre" required placeholder="<?= __('field_genre_placeholder') ?>" class="custom-input">
                 </div>
 
                 <div class="flex flex-col gap-1">
                     <label for="release_year" class="uppercase font-mono text-sm font-bold"><?= __('field_year') ?></label>
-                    <input type="number" name="release_year" id="release_year" required min="1950" max="2050" class="custom-input">
+                    <input type="number" name="release_year" value="<?= htmlspecialchars($old['release_year'] ?? '') ?>" id="release_year" required min="1950" max="2050" class="custom-input">
                 </div>
             </div>
 
             <div class="flex flex-col gap-1">
                 <label for="image_url" class="uppercase font-mono text-sm font-bold"><?= __('field_cover_url') ?></label>
-                <input type="text" name="image_url" id="image_url" required placeholder="https://..." class="custom-input">
+                <input type="text" name="image_url" value="<?= htmlspecialchars($old['image_url'] ?? '') ?>" id="image_url" required placeholder="https://..." class="custom-input">
             </div>
 
             <div class="flex flex-col gap-1 mb-4">
                 <label for="description" class="uppercase font-mono text-sm font-bold"><?= __('field_description') ?></label>
-                <textarea type="text" name="description" id="description" required rows="3" class="custom-input"></textarea>
+                <textarea name="description" id="description" required rows="3" class="custom-input"><?= htmlspecialchars($old['description'] ?? '') ?></textarea>
             </div>
+
+            <?php renderFlash('-mt-2') ?>
 
             <div class="flex justify-end gap-4 border-t-4 border-black pt-6">
                 <button type="button" id="cancelModalBtn" class="custom-btn bg-white"><?= __('cancel') ?></button>

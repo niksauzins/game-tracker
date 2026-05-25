@@ -34,6 +34,10 @@ $total_minutes = array_sum(array_column($sessions, 'duration_minutes'));
 $total_hours = round($total_minutes / 60, 1);
 
 $pageTitle = $entry['title'] . ' ' . __('index_title_2') . ' | ' . __('app_title');
+
+$old = $_SESSION['old'] ?? [];
+$openModal = $_SESSION['open_modal'] ?? '';
+unset($_SESSION['old'], $_SESSION['open_modal']);
 ?>
 
 <?php require_once '../includes/header.php' ?>
@@ -41,7 +45,7 @@ $pageTitle = $entry['title'] . ' ' . __('index_title_2') . ' | ' . __('app_title
 <main class="flex-1 p-6 lg:p-12">
     <a href="entries.php" class="custom-btn bg-white text-sm mb-6"><i class="fa-solid fa-arrow-left mr-2"></i> <?= __('back_to_entries') ?></a>
 
-    <?php renderFlash() ?>
+    <?php if (!$openModal) renderFlash() ?>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
 
@@ -157,7 +161,7 @@ $pageTitle = $entry['title'] . ' ' . __('index_title_2') . ' | ' . __('app_title
 </main>
 
 <!-- Edit entry info -->
-<div id="updateModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center transition-opacity z-50 p-4">
+<div id="updateModal" class="<?= $openModal === 'edit_entry' ? '' : 'hidden' ?> fixed inset-0 bg-black/80 flex justify-center items-center transition-opacity z-50 p-4">
     <div class="custom-card max-w-lg w-full bg-white !p-8">
         <h2 class="font-grotesk text-3xl font-black uppercase border-b-4 border-black pb-2 mb-6"><?= __('modal_edit_entry_title') ?></h2>
 
@@ -168,10 +172,10 @@ $pageTitle = $entry['title'] . ' ' . __('index_title_2') . ' | ' . __('app_title
                 <div class="flex flex-col gap-1">
                     <label for="genre" class="uppercase font-mono text-sm font-bold"><?= __('status') ?></label>
                     <select name="status" id="status" class="custom-input">
-                        <option value="waitlist" <?= $entry['status'] === 'waitlist' ? 'selected' : '' ?>><?= __('status_waitlist') ?></option>
-                        <option value="playing" <?= $entry['status'] === 'playing' ? 'selected' : '' ?>><?= __('status_playing') ?></option>
-                        <option value="finished" <?= $entry['status'] === 'finished' ? 'selected' : '' ?>><?= __('status_finished') ?></option>
-                        <option value="quit" <?= $entry['status'] === 'quit' ? 'selected' : '' ?>><?= __('status_quit') ?></option>
+                        <option value="waitlist" <?= ($old['status'] ?? $entry['status']) === 'waitlist' ? 'selected' : '' ?>><?= __('status_waitlist') ?></option>
+                        <option value="playing" <?= ($old['status'] ?? $entry['status']) === 'playing' ? 'selected' : '' ?>><?= __('status_playing') ?></option>
+                        <option value="finished" <?= ($old['status'] ?? $entry['status']) === 'finished' ? 'selected' : '' ?>><?= __('status_finished') ?></option>
+                        <option value="quit" <?= ($old['status'] ?? $entry['status']) === 'quit' ? 'selected' : '' ?>><?= __('status_quit') ?></option>
                     </select>
                 </div>
 
@@ -180,7 +184,7 @@ $pageTitle = $entry['title'] . ' ' . __('index_title_2') . ' | ' . __('app_title
                     <select name="rating" id="rating" class="custom-input">
                         <option value=""><?= __('field_rating_none') ?></option>
                         <?php for ($i = 5; $i >= 1; $i--): ?>
-                            <option value="<?= $i ?>" <?= $i === $entry['rating'] ? 'selected' : '' ?>><?= str_repeat('⭐', $i) ?></option>
+                            <option value="<?= $i ?>" <?= $i === (int)($old['rating'] ?? $entry['rating']) ? 'selected' : '' ?>><?= str_repeat('⭐', $i) ?></option>
                         <?php endfor; ?>
                     </select>
                 </div>
@@ -189,19 +193,21 @@ $pageTitle = $entry['title'] . ' ' . __('index_title_2') . ' | ' . __('app_title
             <div class="flex flex-col md:grid grid-cols-2 gap-4 ">
                 <div class="flex flex-col gap-1">
                     <label for="started_at" class="uppercase font-mono text-sm font-bold"><?= __('field_date_started') ?></label>
-                    <input type="date" name="started_at" id="started_at" class="custom-input w-full" value="<?= htmlspecialchars($entry['started_at'] ?? '') ?>">
+                    <input type="date" name="started_at" id="started_at" class="custom-input w-full" value="<?= htmlspecialchars($old['started_at'] ?? $entry['started_at'] ?? '') ?>">
                 </div>
 
                 <div class="flex flex-col gap-1">
                     <label for="finished_at" class="uppercase font-mono text-sm font-bold"><?= __('field_date_finished') ?></label>
-                    <input type="date" name="finished_at" id="finished_at" class="custom-input w-full" value="<?= htmlspecialchars($entry['finished_at'] ?? '') ?>">
+                    <input type="date" name="finished_at" id="finished_at" class="custom-input w-full" value="<?= htmlspecialchars($old['finished_at'] ?? $entry['finished_at'] ?? '') ?>">
                 </div>
             </div>
 
             <div class="flex flex-col gap-1 mb-4">
                 <label for="notes" class="uppercase font-mono text-sm font-bold"><?= __('notes') ?></label>
-                <textarea name="notes" id="notes" rows="4" class="custom-input"><?= htmlspecialchars($entry['notes'] ?? '') ?></textarea>
+                <textarea name="notes" id="notes" rows="4" class="custom-input"><?= htmlspecialchars($old['notes'] ?? $entry['notes'] ?? '') ?></textarea>
             </div>
+
+            <?php if ($openModal === 'edit_entry') renderFlash('-mt-2') ?>
 
             <div class="flex justify-end gap-4 border-t-4 border-black pt-6">
                 <button type="button" id="closeUpdateModalBtn" class="custom-btn"><?= __('cancel') ?></button>
@@ -230,7 +236,7 @@ $pageTitle = $entry['title'] . ' ' . __('index_title_2') . ' | ' . __('app_title
 </div>
 
 <!-- Add session -->
-<div id="sessionModal" class="hidden fixed inset-0 bg-black/80 flex justify-center items-center transition-opacity z-50 p-4">
+<div id="sessionModal" class="<?= $openModal === 'add_session' ? '' : 'hidden' ?> fixed inset-0 bg-black/80 flex justify-center items-center transition-opacity z-50 p-4">
     <div class="custom-card max-w-lg w-full bg-white !p-8">
         <h2 class="font-grotesk text-3xl font-black uppercase border-b-4 border-black pb-2 mb-6"><?= __('modal_log_session_title') ?></h2>
 
@@ -240,19 +246,21 @@ $pageTitle = $entry['title'] . ' ' . __('index_title_2') . ' | ' . __('app_title
             <div class="flex flex-col md:grid grid-cols-2 gap-3 mb-3">
                 <div class="flex flex-col gap-1">
                     <label for="played_at" class="uppercase font-mono text-sm font-bold"><?= __('date') ?></label>
-                    <input type="date" name="played_at" id="played_at" required value="<?= date('Y-m-d') ?>" class="custom-input w-full">
+                    <input type="date" name="played_at" id="played_at" required value="<?= $old['played_at'] ?? date('Y-m-d') ?>" class="custom-input w-full">
                 </div>
 
                 <div class="flex flex-col gap-1">
                     <label for="duration_minutes" class="uppercase font-mono text-sm font-bold"><?= __('field_duration') ?></label>
-                    <input type="number" name="duration_minutes" id="duration_minutes" placeholder="90" required class="custom-input">
+                    <input type="number" name="duration_minutes" id="duration_minutes" placeholder="90" required value="<?= htmlspecialchars($old['duration_minutes'] ?? '') ?>" class="custom-input">
                 </div>
             </div>
 
             <div class="flex flex-col gap-1 mb-4">
                 <label for="notes" class="uppercase font-mono text-sm font-bold"><?= __('field_notes_optional') ?></label>
-                <textarea name="notes" id="notes" rows="3" placeholder="<?= __('field_notes_placeholder') ?>" class="custom-input"></textarea>
+                <textarea name="notes" id="notes" rows="3" placeholder="<?= __('field_notes_placeholder') ?>" class="custom-input"><?= htmlspecialchars($old['notes'] ?? '') ?></textarea>
             </div>
+
+            <?php if ($openModal === 'add_session') renderFlash('-mt-2') ?>
 
             <div class="flex justify-end gap-4 border-t-4 border-black pt-6">
                 <button type="button" id="closeSessionModalBtn" class="custom-btn"><?= __('cancel') ?></button>
