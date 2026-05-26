@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../config/db.php';
+require_once __DIR__ . '/../config/db.php';
 requireLogin();
 
 // Get entry id from url
@@ -38,10 +38,10 @@ $openModal = $_SESSION['open_modal'] ?? '';
 unset($_SESSION['old'], $_SESSION['open_modal']);
 ?>
 
-<?php require_once '../includes/header.php' ?>
+<?php require_once BASE_PATH . '/includes/header.php' ?>
 
 <main class="flex-1 p-6 lg:p-12">
-    <a href="entries.php" class="custom-btn bg-white text-sm mb-6"><i class="fa-solid fa-arrow-left mr-2"></i> <?= __('back_to_entries') ?></a>
+    <a href="<?= BASE_URL ?>/pages/entries.php" class="custom-btn bg-white text-sm mb-6"><i class="fa-solid fa-arrow-left mr-2"></i> <?= __('back_to_entries') ?></a>
 
     <?php if (!$openModal) renderFlash() ?>
 
@@ -116,7 +116,7 @@ unset($_SESSION['old'], $_SESSION['open_modal']);
                                             <?= htmlspecialchars($session['notes'] ?? '-') ?>
                                         </td>
                                         <td class="p-3 text-center align-middle">
-                                            <form action="../actions/delete_session.php" method="POST" onsubmit="return confirm('<?= __('confirm_delete_session') ?>');">
+                                            <form action="<?= BASE_URL ?>/actions/delete_session.php" method="POST" onsubmit="return confirm('<?= __('confirm_delete_session') ?>');">
                                                 <input type="hidden" name="session_id" value="<?= $session['id'] ?>">
                                                 <input type="hidden" name="entry_id" value="<?= $session['entry_id'] ?>">
                                                 <button type="submit" class="custom-btn bg-custom-red"><i class="fa-solid fa-trash"></i></button>
@@ -142,7 +142,7 @@ unset($_SESSION['old'], $_SESSION['open_modal']);
                                     <?= htmlspecialchars($session['notes'] ?? __('no_notes')) ?>
                                 </p>
                                 <div class="flex justify-end pt-2">
-                                    <form action="../actions/delete_session.php" method="POST" onsubmit="return confirm('Delete this session?');">
+                                    <form action="<?= BASE_URL ?>/actions/delete_session.php" method="POST" onsubmit="return confirm('Delete this session?');">
                                         <input type="hidden" name="session_id" value="<?= $session['id'] ?>">
                                         <input type="hidden" name="entry_id" value="<?= $session['entry_id'] ?>">
                                         <button type="submit" class="custom-btn bg-custom-red !py-1 w-full text-xs"><i class="fa-solid fa-trash mr-1"></i><?= __('remove_session') ?></button>
@@ -163,7 +163,7 @@ unset($_SESSION['old'], $_SESSION['open_modal']);
     <div class="custom-card max-w-lg w-full bg-white !p-8">
         <h2 class="font-grotesk text-3xl font-black uppercase border-b-4 border-black pb-2 mb-6"><?= __('modal_edit_entry_title') ?></h2>
 
-        <form action="../actions/edit_entry.php" method="POST" class="flex flex-col gap-4">
+        <form action="<?= BASE_URL ?>/actions/edit_entry.php" method="POST" class="flex flex-col gap-4">
             <input type="hidden" name="entry_id" value="<?= $entry_id ?>">
 
             <div class="grid grid-cols-2 gap-4">
@@ -222,7 +222,7 @@ unset($_SESSION['old'], $_SESSION['open_modal']);
 
         <p class="font-mono font-bold uppercase mb-4 text-lg text-center px-4"><?= __('modal_remove_title') ?> <span class="text-white bg-black px-2 py-1d"><?= htmlspecialchars($entry['title']) ?></span> <?= __('modal_remove_prompt') ?></p>
 
-        <form action="../actions/delete_entry.php" method="POST" class="mt-8 mb-4">
+        <form action="<?= BASE_URL ?>/actions/delete_entry.php" method="POST" class="mt-8 mb-4">
             <input type="hidden" name="entry_id" value="<?= htmlspecialchars($entry['id']) ?>">
 
             <div class="flex justify-end gap-4 justify-center">
@@ -238,7 +238,7 @@ unset($_SESSION['old'], $_SESSION['open_modal']);
     <div class="custom-card max-w-lg w-full bg-white !p-8">
         <h2 class="font-grotesk text-3xl font-black uppercase border-b-4 border-black pb-2 mb-6"><?= __('modal_log_session_title') ?></h2>
 
-        <form action="../actions/add_session.php" method="POST" class="flex flex-col gap-4">
+        <form action="<?= BASE_URL ?>/actions/add_session.php" method="POST" class="flex flex-col gap-4">
             <input type="hidden" name="entry_id" value="<?= $entry_id ?>">
 
             <div class="flex flex-col md:grid grid-cols-2 gap-3 mb-3">
@@ -311,4 +311,4 @@ unset($_SESSION['old'], $_SESSION['open_modal']);
     });
 </script>
 
-<?php require_once '../includes/footer.php' ?>
+<?php require_once BASE_PATH . '/includes/footer.php' ?>

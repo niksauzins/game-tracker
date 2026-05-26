@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../config/db.php';
+require_once __DIR__ . '/../config/db.php';
 requireLogin();
 
 $pageTitle = __('nav_my_entries') . ' | ' . __('app_title');
@@ -33,7 +33,7 @@ $games = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $subtitle = $status ? translateStatus($status) : __('lib_subtitle');
 ?>
 
-<?php require_once '../includes/header.php' ?>
+<?php require_once BASE_PATH . '/includes/header.php' ?>
 
 <main class="flex-1 p-6 lg:p-12">
 
@@ -46,7 +46,7 @@ $subtitle = $status ? translateStatus($status) : __('lib_subtitle');
         </div>
 
         <div class="flex w-full md:w-auto gap-4 flex-row flex-wrap">
-            <a href="entries.php" class="custom-btn text-sm <?= $status === '' ? 'bg-custom-red' : '' ?>"><?= __('entries_filter_all') ?></a>
+            <a href="<?= BASE_URL ?>/pages/entries.php" class="custom-btn text-sm <?= $status === '' ? 'bg-custom-red' : '' ?>"><?= __('entries_filter_all') ?></a>
             <a href="?status=playing" class="custom-btn text-sm <?= $status === 'playing' ? 'bg-custom-red' : '' ?>"><?= __('entries_filter_playing') ?></a>
             <a href="?status=waitlist" class="custom-btn text-sm <?= $status === 'waitlist' ? 'bg-custom-red' : '' ?>"><?= __('entries_filter_waitlist') ?></a>
             <a href="?status=finished" class="custom-btn text-sm <?= $status === 'finished' ? 'bg-custom-red' : '' ?>"><?= __('entries_filter_finished') ?></a>
@@ -59,11 +59,11 @@ $subtitle = $status ? translateStatus($status) : __('lib_subtitle');
             <?php
             $cardData = $game;
             $cardData['is_entry'] = true;
-            require '../includes/components/game_card.php';
+            require BASE_PATH . '/includes/components/game_card.php';
             ?>
         <?php endforeach; ?>
 
-        <a href="../pages/games.php" class="flex justify-center items-center flex-col bg-custom-bg h-full min-h-[300px] group border-4 border-dashed border-gray-400 hover:bg-custom-teal custom-hover hover:custom-border hover:border-solid transition-all duration-200">
+        <a href="<?= BASE_URL ?>/pages/games.php" class="flex justify-center items-center flex-col bg-custom-bg h-full min-h-[300px] group border-4 border-dashed border-gray-400 hover:bg-custom-teal custom-hover hover:custom-border hover:border-solid transition-all duration-200">
             <div class="text-center text-xl font-mono font-black uppercase text-gray-400 group-hover:text-black transition-all">
                 <div class="text-5xl mb-2">+</div>
                 <div class="bg-white px-4 border-2 border-gray-400 text-base group-hover:border-black transition-all"><?= __('entries_add_game') ?></div>
@@ -72,4 +72,4 @@ $subtitle = $status ? translateStatus($status) : __('lib_subtitle');
     </div>
 </main>
 
-<?php require_once '../includes/footer.php' ?>
+<?php require_once BASE_PATH . '/includes/footer.php' ?>

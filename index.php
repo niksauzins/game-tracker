@@ -15,8 +15,8 @@
                     <?= __('index_answer') ?>
                 </span>
             </p>
-            <a href="pages/register.php" class="custom-btn bg-custom-teal text-sm md:text-lg w-full"><?= __('index_get_started') ?></a>
-            <a href="pages/login.php" class="custom-btn text-sm md:text-lg w-full"><?= __('nav_login') ?></a>
+            <a href="<?= BASE_URL ?>/pages/register.php" class="custom-btn bg-custom-teal text-sm md:text-lg w-full"><?= __('index_get_started') ?></a>
+            <a href="<?= BASE_URL ?>/pages/login.php" class="custom-btn text-sm md:text-lg w-full"><?= __('nav_login') ?></a>
         </div>
 
     </div>

@@ -1,10 +1,10 @@
 <?php
 session_start();
-require_once '../config/db.php';
+require_once __DIR__ . '/../config/db.php';
 requireLogin();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    redirect('../pages/entries.php');
+    redirect('/pages/entries.php');
 }
 
 // Get game and user id
@@ -20,8 +20,8 @@ try {
     $stmt->execute();
 
     // Go to all entries
-    redirect('../pages/entries.php', 'success', __('flash_entry_added'));
+    redirect('/pages/entries.php', 'success', __('flash_entry_added'));
 } catch (mysqli_sql_exception $e) {
     error_log($e->getMessage());
-    redirect('../pages/entries.php', 'error', __('flash_db_error'));
+    redirect('/pages/entries.php', 'error', __('flash_db_error'));
 }

@@ -1,10 +1,10 @@
 <?php
 session_start();
-require_once '../config/db.php';
+require_once __DIR__ . '/../config/db.php';
 requireLogin();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    redirect('../pages/entries.php');
+    redirect('/pages/entries.php');
 }
 
 // Get game id
@@ -18,12 +18,12 @@ try {
 
     // Check if any rows were deleted
     if ($stmt->affected_rows === 0) {
-        redirect("../pages/entries.php", 'error', __('flash_entry_not_found'));
+        redirect("/pages/entries.php", 'error', __('flash_entry_not_found'));
     }
 
     // Send back if successfull
-    redirect("../pages/entries.php", 'success', __('flash_entry_removed'));
+    redirect("/pages/entries.php", 'success', __('flash_entry_removed'));
 } catch (mysqli_sql_exception $e) {
     error_log($e->getMessage());
-    redirect("../pages/entries.php", 'error', __('flash_remove_failed'));
+    redirect("/pages/entries.php", 'error', __('flash_remove_failed'));
 }

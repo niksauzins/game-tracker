@@ -10,11 +10,11 @@ $status = htmlspecialchars(translateStatus($cardData['status'] ?? ''));
 $isEntry = $cardData['is_entry'] ?? false;
 $entryId = $cardData['entry_id'] ?? null;
 $isAlreadyAdded = !empty($entryId);
-$link = $isEntry ? "entry_detail.php?id={$entryId}" : "game_detail.php?id={$id}";
+$link = $isEntry ? "/pages/entry_detail.php?id={$entryId}" : "/pages/game_detail.php?id={$id}";
 ?>
 
 <div class="custom-card relative flex flex-col h-full bg-white custom-hover group overflow-hidden">
-    <a href="<?= $link ?>" class="absolute inset-0 z-10"></a>
+    <a href="<?= BASE_URL . $link ?>" class="absolute inset-0 z-10"></a>
 
     <div class="custom-border overflow-hidden h-48 mb-4 relative">
         <img src="<?= $image_url ?>" alt="<?php $title ?> cover" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300">
@@ -39,7 +39,7 @@ $link = $isEntry ? "entry_detail.php?id={$entryId}" : "game_detail.php?id={$id}"
 
     <!-- When the user already added the game, don't show the button to add again -->
     <?php if (!$isAlreadyAdded): ?>
-        <form action="../actions/add_entry.php" method="POST" class="relative z-30 mt-auto pt-2">
+        <form action="<?= BASE_URL ?>/actions/add_entry.php" method="POST" class="relative z-30 mt-auto pt-2">
             <input type="hidden" name="game_id" value="<?= $id ?>">
             <button type="submit" class="custom-btn !bg-custom-teal w-full text-sm"><?= __('card_add_to_entries') ?></button>
         </form>

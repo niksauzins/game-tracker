@@ -1,10 +1,10 @@
 <?php
 session_start();
-require_once '../config/db.php';
+require_once __DIR__ . '/../config/db.php';
 requireAdmin();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    redirect('../pages/games.php');
+    redirect('/pages/games.php');
 }
 
 // Get game id
@@ -18,12 +18,12 @@ try {
 
     // Check if any rows were deleted
     if ($stmt->affected_rows === 0) {
-        redirect("../pages/games.php", 'error', __('flash_session_not_found'));
+        redirect("/pages/games.php", 'error', __('flash_session_not_found'));
     }
 
     // Send back if successfull
-    redirect("../pages/games.php", 'success', __('flash_game_deleted'));
+    redirect("/pages/games.php", 'success', __('flash_game_deleted'));
 } catch (mysqli_sql_exception $e) {
     error_log($e->getMessage());
-    redirect("../pages/games.php", 'error', __('flash_delete_failed'));
+    redirect("/pages/games.php", 'error', __('flash_delete_failed'));
 }

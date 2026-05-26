@@ -6,7 +6,7 @@ function redirect(string $url, string $flashType = '', string $flashMessage = ''
     if ($flashType && $flashMessage) {
         setFlash($flashType, $flashMessage);
     }
-    header("Location: {$url}");
+    header("Location: " . BASE_URL . $url);
     exit;
 }
 
@@ -25,14 +25,14 @@ function isAdmin(): bool
 function requireLogin(): void
 {
     if (!isLoggedIn()) {
-        redirect('../pages/login.php');
+        redirect('/pages/login.php');
     }
 }
 
 function requireAdmin(): void
 {
     if (!isAdmin()) {
-        redirect('../pages/dashboard.php');
+        redirect('/pages/dashboard.php');
     }
 }
 
@@ -92,7 +92,7 @@ $current_lang = $_SESSION['lang'] ?? 'en';
 
 // Load the correct language file
 $translation = [];
-$lang_file_location = __DIR__ . "/../lang/{$current_lang}.php";
+$lang_file_location = BASE_PATH . "/lang/{$current_lang}.php";
 if (file_exists($lang_file_location)) {
     $translation = require $lang_file_location;
 }

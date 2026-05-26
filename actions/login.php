@@ -1,10 +1,10 @@
 <?php
 session_start();
-require_once '../config/db.php';
+require_once __DIR__ . '/../config/db.php';
 
 // Only accept POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    redirect('../pages/login.php');
+    redirect('/pages/login.php');
 }
 
 $email = trim($_POST['email'] ?? '');
@@ -17,7 +17,7 @@ unset($_SESSION['old']['password']);
 
 // All fields are required
 if (empty($email) || empty($password)) {
-    redirect('../pages/login.php', 'error', __('flash_all_fields_required'));
+    redirect('/pages/login.php', 'error', __('flash_all_fields_required'));
 }
 
 // Find the user with the correct email
@@ -28,7 +28,7 @@ $user = $stmt->get_result()->fetch_assoc();
 
 // If user with that email doesn't exist or the password doesn't match show an error
 if (!$user || !password_verify($password, $user['password'])) {
-    redirect('../pages/login.php', 'error', __('flash_invalid_credentials'));
+    redirect('/pages/login.php', 'error', __('flash_invalid_credentials'));
 }
 
 unset($_SESSION['old']);
@@ -38,4 +38,4 @@ $_SESSION['user_id'] = $user['id'];
 $_SESSION['username'] = $user['username'];
 $_SESSION['role'] = $user['role'];
 
-redirect('../pages/dashboard.php', 'success', __('flash_login_success'));
+redirect('/pages/dashboard.php', 'success', __('flash_login_success'));

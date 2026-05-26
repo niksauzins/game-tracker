@@ -14,7 +14,7 @@ $languageUrl = '?' . http_build_query($newParams);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $pageTitle ?? __('app_title') ?></title>
-    <link rel="icon" href="/favicon.png" type="image/x-icon">
+    <link rel="icon" href="<?= BASE_URL ?>/favicon.png" type="image/x-icon">
 
     <!-- Custom Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -103,13 +103,13 @@ $languageUrl = '?' . http_build_query($newParams);
                 <nav class="flex flex-col justify-between mt-0 md:mt-8 text-lg">
                     <div class="flex flex-col gap-5 md:gap-6 font-bold font-mono">
                         <?php if (isLoggedIn()): ?>
-                            <a href="/pages/dashboard.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-house"></i> <?= __('nav_dashboard') ?></a>
-                            <a href="/pages/games.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-gamepad"></i> <?= __('nav_library') ?></a>
-                            <a href="/pages/entries.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-layer-group"></i> <?= __('nav_my_entries') ?></a>
+                            <a href="<?= BASE_URL ?>/pages/dashboard.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-house"></i> <?= __('nav_dashboard') ?></a>
+                            <a href="<?= BASE_URL ?>/pages/games.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-gamepad"></i> <?= __('nav_library') ?></a>
+                            <a href="<?= BASE_URL ?>/pages/entries.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-layer-group"></i> <?= __('nav_my_entries') ?></a>
                         <?php else: ?>
-                            <a href="/" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-house"></i> <?= __('nav_home') ?></a>
-                            <a href="/pages/login.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-arrow-right-to-bracket"></i> <?= __('nav_login') ?></a>
-                            <a href="/pages/register.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-user-plus"></i> <?= __('nav_register') ?></a>
+                            <a href="<?= BASE_URL ?>/" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-house"></i> <?= __('nav_home') ?></a>
+                            <a href="<?= BASE_URL ?>/pages/login.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-arrow-right-to-bracket"></i> <?= __('nav_login') ?></a>
+                            <a href="<?= BASE_URL ?>/pages/register.php" class="hover:text-custom-red hover:translate-x-2 transition"><i class="fa-solid fa-user-plus"></i> <?= __('nav_register') ?></a>
                         <?php endif; ?>
                     </div>
                 </nav>
@@ -123,7 +123,7 @@ $languageUrl = '?' . http_build_query($newParams);
                             <?= $current_lang === 'lv' ? 'EN' : 'LV' ?>
                         </a>
                     </div>
-                    <a href="../actions/logout.php" class="w-full custom-btn bg-black !text-white hover:!bg-custom-red"><?= __('nav_logout') ?></a>
+                    <a href="<?= BASE_URL ?>/actions/logout.php" class="w-full custom-btn bg-black !text-white hover:!bg-custom-red"><?= __('nav_logout') ?></a>
                 <?php else: ?>
                     <div class="flex justify-end">
                         <a href="<?= $languageUrl ?>" class="custom-btn !px-2 !py-1">

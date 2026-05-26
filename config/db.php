@@ -4,6 +4,10 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// System constants
+define('BASE_PATH', dirname(__DIR__));
+define('BASE_URL', 'http://localhost');
+
 $host = 'localhost';
 $db = 'game_tracker';
 $user = 'root';
@@ -18,4 +22,4 @@ if ($conn->connect_error) {
     die('Connection failed: ' . $conn->connect_error);
 }
 
-require_once __DIR__ . '/../includes/helpers.php';
+require_once BASE_PATH . '/includes/helpers.php';

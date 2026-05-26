@@ -1,10 +1,10 @@
 <?php
 session_start();
-require_once '../config/db.php';
+require_once __DIR__ . '/../config/db.php';
 requireLogin();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    redirect('../pages/entries.php');
+    redirect('/pages/entries.php');
 }
 
 // Form values
@@ -21,12 +21,12 @@ $_SESSION['open_modal'] = 'edit_entry';
 // Validate data
 $allowed_statuses = ['waitlist', 'playing', 'finished', 'quit'];
 if (!in_array($status, $allowed_statuses)) {
-    redirect("../pages/entry_detail.php?id={$entry_id}", 'error', __('flash_invalid_status'));
+    redirect("/pages/entry_detail.php?id={$entry_id}", 'error', __('flash_invalid_status'));
 }
 
 // Finished at should be after started at
 if ($started_at && $finished_at && $started_at > $finished_at) {
-    redirect("../pages/entry_detail.php?id={$entry_id}", 'error', __('flash_date_order_invalid'));
+    redirect("/pages/entry_detail.php?id={$entry_id}", 'error', __('flash_date_order_invalid'));
 }
 
 
@@ -42,8 +42,8 @@ try {
 
     unset($_SESSION['old'], $_SESSION['open_modal']);
 
-    redirect("../pages/entry_detail.php?id={$entry_id}", 'success', __('flash_entry_updated'));
+    redirect("/pages/entry_detail.php?id={$entry_id}", 'success', __('flash_entry_updated'));
 } catch (mysqli_sql_exception $e) {
     error_log($e->getMessage());
-    redirect("../pages/entry_detail.php?id={$entry_id}", 'error', __('flash_db_error'));
+    redirect("/pages/entry_detail.php?id={$entry_id}", 'error', __('flash_db_error'));
 }

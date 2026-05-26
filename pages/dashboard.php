@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../config/db.php';
+require_once __DIR__ . '/../config/db.php';
 requireLogin();
 
 $pageTitle = __('nav_dashboard') . ' | ' . __('app_title');
@@ -46,7 +46,7 @@ $stmt->execute();
 $lastPlayed = $stmt->get_result()->fetch_assoc()['title'] ?? __('none');
 ?>
 
-<?php require_once '../includes/header.php' ?>
+<?php require_once BASE_PATH . '/includes/header.php' ?>
 
 <main class="flex-1 p-6 lg:p-12">
     <?php renderFlash() ?>
@@ -57,8 +57,8 @@ $lastPlayed = $stmt->get_result()->fetch_assoc()['title'] ?? __('none');
         </div>
 
         <div class="flex w-full md:w-auto gap-4 flex-col sm:flex-row">
-            <a href="games.php" class="custom-btn text-sm"><?= __('browse_library') ?></a>
-            <a href="entries.php" class="custom-btn text-sm bg-custom-teal"><?= __('my_entries') ?></a>
+            <a href="<?= BASE_URL ?>/pages/games.php" class="custom-btn text-sm"><?= __('browse_library') ?></a>
+            <a href="<?= BASE_URL ?>/pages/entries.php" class="custom-btn text-sm bg-custom-teal"><?= __('my_entries') ?></a>
         </div>
     </div>
 
@@ -87,4 +87,4 @@ $lastPlayed = $stmt->get_result()->fetch_assoc()['title'] ?? __('none');
     </div>
 </main>
 
-<?php require_once '../includes/footer.php' ?>
+<?php require_once BASE_PATH . '/includes/footer.php' ?>

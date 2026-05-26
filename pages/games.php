@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../config/db.php';
+require_once __DIR__ . '/../config/db.php';
 requireLogin();
 
 $pageTitle = __('lib_title') . ' | ' . __('app_title');
@@ -34,7 +34,7 @@ unset($_SESSION['old']);
 $openModal = !empty($old);
 ?>
 
-<?php require_once '../includes/header.php' ?>
+<?php require_once BASE_PATH . '/includes/header.php' ?>
 
 <main class="flex-1 p-6 lg:p-12">
 
@@ -47,7 +47,7 @@ $openModal = !empty($old);
         </div>
 
         <div class="flex w-full md:w-auto gap-4 flex-col sm:flex-row">
-            <form action="games.php" method="GET" class="flex gap-2 w-full sm:w-auto">
+            <form action="<?= BASE_URL ?>/pages/games.php" method="GET" class="flex gap-2 w-full sm:w-auto">
                 <input type="text" name="search" value="<?= $search ?>" placeholder="<?= __('lib_search_placeholder') ?>" class="custom-input py-2 flex-1 w-full min-w-0">
                 <button type="submit" class="custom-btn bg-custom-yellow text-xs lg:text-sm shrink-0"><?= __('lib_search') ?></button>
             </form>
@@ -63,7 +63,7 @@ $openModal = !empty($old);
         <?php if (empty($games)): ?>
             <div class="col-span-full custom-card !bg-custom-yellow text-center py-12">
                 <p class="font-mono font-bold text-2xl uppercase mb-4"><?= __('lib_no_games_found') ?></p>
-                <a href="games.php" class="custom-btn text-sm bg-white"><?= __('lib_clear_search') ?></a>
+                <a href="<?= BASE_URL ?>/pages/games.php" class="custom-btn text-sm bg-white"><?= __('lib_clear_search') ?></a>
             </div>
         <?php endif; ?>
 
@@ -71,7 +71,7 @@ $openModal = !empty($old);
         <?php foreach ($games as $game): ?>
             <?php
             $cardData = $game;
-            require '../includes/components/game_card.php';
+            require BASE_PATH . '/includes/components/game_card.php';
             ?>
         <?php endforeach; ?>
     </div>
@@ -82,7 +82,7 @@ $openModal = !empty($old);
     <div class="custom-card max-w-lg w-full bg-white">
         <h2 class="font-grotesk text-3xl font-black uppercase border-b-4 border-black pb-2 mb-6"><?= __('modal_add_game_title') ?></h2>
 
-        <form action="../actions/add_game.php" method="POST" class="flex flex-col gap-4">
+        <form action="<?= BASE_URL ?>/actions/add_game.php" method="POST" class="flex flex-col gap-4">
             <div class="flex flex-col gap-1">
                 <label for="title" class="uppercase font-mono text-sm font-bold"><?= __('field_title') ?></label>
                 <input type="text" name="title" value="<?= htmlspecialchars($old['title'] ?? '') ?>" id="title" required class="custom-input">
@@ -139,4 +139,4 @@ $openModal = !empty($old);
     });
 </script>
 
-<?php require_once '../includes/footer.php' ?>
+<?php require_once BASE_PATH . '/includes/footer.php' ?>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../config/db.php';
+require_once __DIR__ . '/../config/db.php';
 requireLogin();
 
 // Get game id from url
@@ -24,11 +24,11 @@ unset($_SESSION['old']);
 $openModal = !empty($old);
 ?>
 
-<?php require_once '../includes/header.php' ?>
+<?php require_once BASE_PATH . '/includes/header.php' ?>
 
 <main class="flex-1 p-6 lg:p-12 flex flex-col items-center">
     <div class="w-full max-w-4xl mb-6">
-        <a href="games.php" class="custom-btn bg-white text-sm"><i class="fa-solid fa-arrow-left mr-2"></i> <?= __('back_to_library') ?></a>
+        <a href="<?= BASE_URL ?>/pages/games.php" class="custom-btn bg-white text-sm"><i class="fa-solid fa-arrow-left mr-2"></i> <?= __('back_to_library') ?></a>
     </div>
 
     <?php if (!$openModal) renderFlash('max-w-4xl w-full') ?>
@@ -76,7 +76,7 @@ $openModal = !empty($old);
         <div class="custom-card max-w-lg w-full bg-white">
             <h2 class="font-grotesk text-3xl font-black uppercase border-b-4 border-black pb-2 mb-6"><?= __('modal_edit_game_title') ?></h2>
 
-            <form action="../actions/edit_game.php" method="POST" class="flex flex-col gap-4">
+            <form action="<?= BASE_URL ?>/actions/edit_game.php" method="POST" class="flex flex-col gap-4">
                 <input type="hidden" name="game_id" id="game_id" value="<?= htmlspecialchars($game['id']) ?>">
 
                 <div class="flex flex-col gap-1">
@@ -123,7 +123,7 @@ $openModal = !empty($old);
 
             <p class="font-mono font-bold uppercase mb-4 text-lg text-center"><?= __('delete') ?> <span class="text-white bg-black px-2 py-1"><?= htmlspecialchars($game['title']) ?></span> <?= __('modal_delete_prompt') ?></p>
 
-            <form action="../actions/delete_game.php" method="POST" class="mt-8 mb-4">
+            <form action="<?= BASE_URL ?>/actions/delete_game.php" method="POST" class="mt-8 mb-4">
                 <input type="hidden" name="game_id" id="game_id" value="<?= htmlspecialchars($game['id']) ?>">
 
                 <div class="flex justify-end gap-4 justify-center">
@@ -167,4 +167,4 @@ $openModal = !empty($old);
     </script>
 <?php endif; ?>
 
-<?php require_once '../includes/footer.php' ?>
+<?php require_once BASE_PATH . '/includes/footer.php' ?>
