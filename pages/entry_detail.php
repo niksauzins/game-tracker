@@ -269,46 +269,9 @@ unset($_SESSION['old'], $_SESSION['open_modal']);
 </div>
 
 <script>
-    // DOM variables
-    const updateModal = document.getElementById('updateModal');
-    const openUpdateModalBtn = document.getElementById('openUpdateModalBtn');
-    const closeUpdateModalBtn = document.getElementById('closeUpdateModalBtn');
-
-    const removeModal = document.getElementById('removeModal');
-    const openRemoveModalBtn = document.getElementById('openRemoveModalBtn');
-    const closeRemoveModalBtn = document.getElementById('closeRemoveModalBtn');
-
-    const sessionModal = document.getElementById('sessionModal');
-    const openSessionModalBtn = document.getElementById('openSessionModalBtn');
-    const closeSessionModalBtn = document.getElementById('closeSessionModalBtn');
-
-    // Modal visibility toggles
-    const toggleUpdateModal = () => updateModal.classList.toggle('hidden');
-    const toggleRemoveModal = () => removeModal.classList.toggle('hidden');
-    const toggleSessionModal = () => sessionModal.classList.toggle('hidden');
-
-    // Event listeners for buttons
-    if (openUpdateModalBtn) openUpdateModalBtn.addEventListener('click', toggleUpdateModal);
-    if (closeUpdateModalBtn) closeUpdateModalBtn.addEventListener('click', toggleUpdateModal);
-
-    if (openRemoveModalBtn) openRemoveModalBtn.addEventListener('click', toggleRemoveModal);
-    if (closeRemoveModalBtn) closeRemoveModalBtn.addEventListener('click', toggleRemoveModal);
-
-    if (openSessionModalBtn) openSessionModalBtn.addEventListener('click', toggleSessionModal);
-    if (closeSessionModalBtn) closeSessionModalBtn.addEventListener('click', toggleSessionModal);
-
-    // Event listener for clicking outside the modal
-    window.addEventListener('click', (e) => {
-        if (e.target === updateModal) {
-            toggleUpdateModal();
-        }
-        if (e.target === removeModal) {
-            toggleRemoveModal();
-        }
-        if (e.target === sessionModal) {
-            toggleSessionModal();
-        }
-    });
+    setupModal('updateModal', 'openUpdateModalBtn', 'closeUpdateModalBtn');
+    setupModal('removeModal', 'openRemoveModalBtn', 'closeRemoveModalBtn');
+    setupModal('sessionModal', 'openSessionModalBtn', 'closeSessionModalBtn');
 </script>
 
 <?php require_once BASE_PATH . '/includes/footer.php' ?>

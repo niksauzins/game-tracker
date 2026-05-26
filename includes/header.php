@@ -82,6 +82,24 @@ $languageUrl = '?' . http_build_query($newParams);
             background-size: 24px 24px;
         }
     </style>
+
+    <script>
+        // Helper function for setting up modals
+        function setupModal(modalId, openModalId, closeModalId) {
+            const modal = document.getElementById(modalId);
+            const openBtn = document.getElementById(openModalId);
+            const closeBtn = document.getElementById(closeModalId);
+
+            const toggle = () => modal.classList.toggle('hidden');
+
+            if (openBtn) openBtn.addEventListener('click', toggle);
+            if (closeBtn) closeBtn.addEventListener('click', toggle);
+
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) toggle();
+            })
+        }
+    </script>
 </head>
 
 <body class="min-h-screen flex flex-col md:flex-row text-black relative">

@@ -113,7 +113,7 @@ $openModal = !empty($old);
             <?php renderFlash('-mt-2') ?>
 
             <div class="flex justify-end gap-4 border-t-4 border-black pt-6">
-                <button type="button" id="cancelModalBtn" class="custom-btn bg-white"><?= __('cancel') ?></button>
+                <button type="button" id="closeModalBtn" class="custom-btn bg-white"><?= __('cancel') ?></button>
                 <button type="submit" class="custom-btn !bg-custom-teal text-lg"><?= __('btn_save_game') ?></button>
             </div>
         </form>
@@ -121,22 +121,7 @@ $openModal = !empty($old);
 </div>
 
 <script>
-    // Set variables
-    const modal = document.getElementById('gameModal');
-    const openModalBtn = document.getElementById('openModalBtn');
-    const cancelModalBtn = document.getElementById('cancelModalBtn');
-
-    // Help toggle the modal
-    const toggleModal = () => modal.classList.toggle('hidden');
-
-    // When clicked, toggle the modal
-    if (openModalBtn) openModalBtn.addEventListener('click', toggleModal);
-    if (cancelModalBtn) cancelModalBtn.addEventListener('click', toggleModal);
-
-    // Close modal when clicked outside
-    window.addEventListener('click', (e) => {
-        if (e.target === modal) toggleModal();
-    });
+    setupModal('gameModal', 'openModalBtn', 'closeModalBtn');
 </script>
 
 <?php require_once BASE_PATH . '/includes/footer.php' ?>
