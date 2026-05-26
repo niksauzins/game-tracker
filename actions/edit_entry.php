@@ -4,8 +4,7 @@ require_once '../config/db.php';
 requireLogin();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../pages/entries.php');
-    exit;
+    redirect('../pages/entries.php');
 }
 
 // Form values
@@ -22,16 +21,12 @@ $_SESSION['open_modal'] = 'edit_entry';
 // Validate data
 $allowed_statuses = ['waitlist', 'playing', 'finished', 'quit'];
 if (!in_array($status, $allowed_statuses)) {
-    setFlash('error', __('flash_invalid_status'));
-    header("Location: ../pages/entry_detail.php?id={$entry_id}");
-    exit;
+    redirect("../pages/entry_detail.php?id={$entry_id}", 'error', __('flash_invalid_status'));
 }
 
 // Finished at should be after started at
 if ($started_at && $finished_at && $started_at > $finished_at) {
-    setFlash('error', __('flash_date_order_invalid'));
-    header("Location: ../pages/entry_detail.php?id={$entry_id}");
-    exit;
+    redirect("../pages/entry_detail.php?id={$entry_id}", 'error', __('flash_date_order_invalid'));
 }
 
 
@@ -44,15 +39,11 @@ try {
     ');
     $stmt->bind_param('sisssii', $status, $rating, $started_at, $finished_at, $notes, $entry_id, $_SESSION['user_id']);
     $stmt->execute();
-    
+
     unset($_SESSION['old'], $_SESSION['open_modal']);
-    
-    setFlash('success', __('flash_entry_updated'));
-    header("Location: ../pages/entry_detail.php?id={$entry_id}");
-    exit;
+
+    redirect("../pages/entry_detail.php?id={$entry_id}", 'success', __('flash_entry_updated'));
 } catch (mysqli_sql_exception $e) {
     error_log($e->getMessage());
-    setFlash('error', __('flash_db_error'));
-    header("Location: ../pages/entry_detail.php?id={$entry_id}");
-    exit;
+    redirect("../pages/entry_detail.php?id={$entry_id}", 'error', __('flash_db_error'));
 }

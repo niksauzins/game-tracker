@@ -4,8 +4,7 @@ require_once '../config/db.php';
 requireAdmin();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../pages/games.php');
-    exit;
+    redirect('../pages/games.php');
 }
 
 // Form values
@@ -20,23 +19,17 @@ $_SESSION['old'] = $_POST;
 
 // Check if all fields are filled
 if (empty($title) || empty($genre) || empty($release_year) || empty($image_url) || empty($description)) {
-    setFlash('error', __('flash_all_fields_required'));
-    header("Location: ../pages/game_detail.php?id={$game_id}");
-    exit;
+    redirect("../pages/game_detail.php?id={$game_id}", 'error', __('flash_all_fields_required'));
 }
 
 // Validate image URL
 if (!filter_var($image_url, FILTER_VALIDATE_URL)) {
-    setFlash('error', __('flash_invalid_image_url'));
-    header("Location: ../pages/game_detail.php?id={$game_id}");
-    exit;
+    redirect("../pages/game_detail.php?id={$game_id}", 'error', __('flash_invalid_image_url'));
 }
 
 // Check release date
 if ($release_year < 1950 || $release_year > 2050) {
-    setFlash('error', __('flash_invalid_release_year'));
-    header("Location: ../pages/game_detail.php?id={$game_id}");
-    exit;
+    redirect("../pages/game_detail.php?id={$game_id}", 'error', __('flash_invalid_release_year'));
 }
 
 
@@ -49,12 +42,8 @@ try {
     unset($_SESSION['old']);
 
     // Send back if successfull
-    setFlash('success', __('flash_game_updated'));
-    header("Location: ../pages/game_detail.php?id={$game_id}");
-    exit;
+    redirect("../pages/game_detail.php?id={$game_id}", 'success', __('flash_game_updated'));
 } catch (mysqli_sql_exception $e) {
     error_log($e->getMessage());
-    setFlash('error', __('flash_db_error'));
-    header("Location: ../pages/game_detail.php?id={$game_id}");
-    exit;
+    redirect("../pages/game_detail.php?id={$game_id}", 'error', __('flash_db_error'));
 }

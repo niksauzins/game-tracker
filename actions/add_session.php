@@ -4,8 +4,7 @@ require_once '../config/db.php';
 requireLogin();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../pages/entries.php');
-    exit;
+    redirect('../pages/entries.php');
 }
 
 // Form values
@@ -22,16 +21,12 @@ $_SESSION['open_modal'] = 'add_session';
 
 // Validate
 if ($entry_id <= 0 || empty($played_at) || $duration_minutes <= 0) {
-    setFlash('error', __('flash_invalid_session_inputs'));
-    header("Location: ../pages/entry_detail.php?id={$entry_id}");
-    exit;
+    redirect("../pages/entry_detail.php?id={$entry_id}", 'error', __('flash_invalid_session_inputs'));
 }
 
 // Don't allow future dates
 if (!empty($played_at) && $played_at > date('Y-m-d')) {
-    setFlash('error', __('flash_session_future_date'));
-    header("Location: ../pages/entry_detail.php?id={$entry_id}");
-    exit;
+    redirect("../pages/entry_detail.php?id={$entry_id}", 'error', __('flash_session_future_date'));
 }
 
 
@@ -40,9 +35,7 @@ $stmt = $conn->prepare('SELECT id FROM game_entries WHERE id = ? AND user_id = ?
 $stmt->bind_param('ii', $entry_id, $_SESSION['user_id']);
 $stmt->execute();
 if (!$stmt->get_result()->fetch_assoc()) {
-    setFlash('error', __('flash_unauthorized'));
-    header('Location: ../pages/entries.php');
-    exit;
+    redirect('../pages/entries.php', 'error', __('flash_unauthorized'));
 }
 
 try {
@@ -53,12 +46,8 @@ try {
 
     unset($_SESSION['old'], $_SESSION['open_modal']);
 
-    setFlash('success', __('flash_session_added'));
-    header("Location: ../pages/entry_detail.php?id={$entry_id}");
-    exit;
+    redirect("../pages/entry_detail.php?id={$entry_id}", 'success', __('flash_session_added'));
 } catch (mysqli_sql_exception $e) {
     error_log($e->getMessage());
-    setFlash('error', __('flash_db_error'));
-    header("Location: ../pages/entry_detail.php?id={$entry_id}");
-    exit;
+    redirect("../pages/entry_detail.php?id={$entry_id}", 'error', __('flash_db_error'));
 }

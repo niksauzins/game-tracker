@@ -4,8 +4,7 @@ require_once '../config/db.php';
 requireLogin();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../pages/entries.php');
-    exit;
+    redirect('../pages/entries.php');
 }
 
 // Get game and user id
@@ -21,12 +20,8 @@ try {
     $stmt->execute();
 
     // Go to all entries
-    setFlash('success', __('flash_entry_added'));
-    header('Location: ../pages/entries.php');
-    exit;
+    redirect('../pages/entries.php', 'success', __('flash_entry_added'));
 } catch (mysqli_sql_exception $e) {
     error_log($e->getMessage());
-    setFlash('error', __('flash_db_error'));
-    header('Location: ../pages/entries.php');
-    exit;
+    redirect('../pages/entries.php', 'error', __('flash_db_error'));
 }

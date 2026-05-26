@@ -1,10 +1,10 @@
 <?php
 session_start();
 require_once '../config/db.php';
+
 // If user is logged in, redirect to dashboard
 if (isLoggedIn()) {
-    header('Location: dashboard.php');
-    exit;
+    redirect('dashboard.php');
 }
 
 $pageTitle = __('nav_login') . ' | ' . __('app_title');

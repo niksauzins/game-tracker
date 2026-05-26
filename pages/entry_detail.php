@@ -19,9 +19,7 @@ $entry = $stmt->get_result()->fetch_assoc();
 
 // If no game found, go back
 if (!$entry) {
-    setFlash('error', __('flash_entry_not_found'));
-    header('Location: entries.php');
-    exit;
+    redirect('entries.php', 'error', __('flash_entry_not_found'));
 }
 
 // Get all sessions for this entry

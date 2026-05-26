@@ -1,4 +1,15 @@
 <?php
+
+// Redirect user
+function redirect(string $url, string $flashType = '', string $flashMessage = '')
+{
+    if ($flashType && $flashMessage) {
+        setFlash($flashType, $flashMessage);
+    }
+    header("Location: {$url}");
+    exit;
+}
+
 // Helper functions for checking login and admin role
 
 function isLoggedIn(): bool
@@ -14,16 +25,14 @@ function isAdmin(): bool
 function requireLogin(): void
 {
     if (!isLoggedIn()) {
-        header('Location: ../pages/login.php');
-        exit;
+        redirect('../pages/login.php');
     }
 }
 
 function requireAdmin(): void
 {
     if (!isAdmin()) {
-        header('Location: ../pages/dashboard.php');
-        exit;
+        redirect('../pages/dashboard.php');
     }
 }
 
