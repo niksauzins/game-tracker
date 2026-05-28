@@ -14,7 +14,7 @@ $game = $stmt->get_result()->fetch_assoc();
 
 // If no game found, go back
 if (!$game) {
-    redirect('games.php', 'error', __('flash_game_not_found'));
+    redirect('/pages/games.php', 'error', __('flash_game_not_found'));
 }
 
 $pageTitle = $game['title'] . ' | ' . __('app_title');

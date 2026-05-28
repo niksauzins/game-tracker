@@ -4,7 +4,7 @@ require_once __DIR__ . '/../config/db.php';
 
 // If user is logged in, redirect to dashboard
 if (isLoggedIn()) {
-    redirect('dashboard.php');
+    redirect('/pages/dashboard.php');
 }
 
 $pageTitle = __('nav_login') . ' | ' . __('app_title');
