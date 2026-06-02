@@ -2,6 +2,10 @@
 
 A web application to track and manage your video games, log sessions, and rate finished games. Built with PHP, MySQL, and Tailwind CSS.
 
+### Live App
+
+You can access the live version of the application here: [tracker.nickroger.dev](https://tracker.nickroger.dev/)
+
 ### Features
 
 - **User Authentication:** Secure registration and login.
@@ -22,6 +26,10 @@ A web application to track and manage your video games, log sessions, and rate f
 # Spēļu Izsekotājs
 
 Tīmekļa lietojumprogramma, kas ļauj sekot līdzi savām videospēlēm, pārvaldīt tās, reģistrēt spēļu sesijas un novērtēt pabeigtās spēles. Izstrādāta, izmantojot PHP, MySQL un Tailwind CSS.
+
+### Tiešsaistes vietne
+
+Lietojumprogrammas tiešsaistes versija ir pieejama šeit: [tracker.nickroger.dev](https://tracker.nickroger.dev/)
 
 ### Funkcijas
 
